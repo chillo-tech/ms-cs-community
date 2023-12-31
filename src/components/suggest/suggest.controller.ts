@@ -17,8 +17,6 @@ const makeSuggestion = async (req: Request, res: Response) => {
       title,
     });
 
-    console.log('suggest', suggest);
-
     // make external API calls
     const tempTag = ['tech'];
     if (suggest.author?.tag) {
