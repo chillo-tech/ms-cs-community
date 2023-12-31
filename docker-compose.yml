@@ -9,7 +9,8 @@ services:
     ports:
       # The HTTP port
       - '8001:3000'
-
+    environment:
+      NODE_ENV: production
     networks:
       - applications-network
 networks:
