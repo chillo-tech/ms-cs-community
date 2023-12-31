@@ -14,7 +14,6 @@ class SuggestZodSchema {
           .optional(),
         phoneIndex: number(),
         phone: number(),
-        civility: string(),
       }),
       title: string({
         required_error: 'Title is required',
