@@ -1,4 +1,0 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.privateKey = void 0;
-exports.privateKey = 'CUSTOM_PRIVATE_KEY';
