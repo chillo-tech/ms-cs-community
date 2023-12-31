@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import validate from '../../middlewares/requestValidation';
-import suggestZodSchema from './suggest.zod';
+import suggestZodSchema from './suggestions.zod';
 import { authToken } from '../../middlewares/jwt';
-import suggestController from './suggest.controller';
+import suggestController from './suggestions.controller';
 
 const router = Router();
 

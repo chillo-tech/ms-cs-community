@@ -1,5 +1,5 @@
 import { model } from 'mongoose';
-import { suggestSchema } from './suggest.schema';
+import { suggestSchema } from './suggestions.schema';
 
 const Suggest = model('Suggest', suggestSchema);
 export default Suggest;

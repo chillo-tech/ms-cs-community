@@ -1,13 +1,11 @@
-import config from 'config';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
-import path from 'path';
 import favicon from 'serve-favicon';
-import dotenv from 'dotenv';
 import { dbInit } from './components/db/connect';
-import suggestRouter from './components/suggest/suggest.routes';
 import jwtRouter from './components/jwt/jwt.routes';
+import suggestRouter from './components/suggestions/suggestions.routes';
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
 import { SuggestionType } from '../../types/Suggest';
-import Suggest from './suggest.model';
+import Suggest from './suggestions.model';
 
 const create = async (suggestion: SuggestionType) => {
   try {
