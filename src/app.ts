@@ -1,13 +1,12 @@
-import config from 'config';
+import 'module-alias/register';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
-import path from 'path';
-import favicon from 'serve-favicon';
-import dotenv from 'dotenv';
+
 import { dbInit } from './components/db/connect';
-import suggestRouter from './components/suggest/suggest.routes';
 import jwtRouter from './components/jwt/jwt.routes';
+import suggestionsRouter from '@suggestion/suggestions.routes';
 
 dotenv.config();
 
@@ -22,15 +21,7 @@ app
   .use(express.json())
   .use(morgan('dev'));
 
-app
-  .use('/public', express.static('assets'))
-  .use(favicon('./assets/images/favicon.ico'));
-
-app.get('/', (req, res) => {
-  res.send('it works. Done by BrightkyEfoo');
-});
-
-app.use('/api/v1/suggest',suggestRouter)
+app.use('/api/v1/suggest',suggestionsRouter)
 app.use('/api/v1/tokens', jwtRouter)
 // Do your logic here
 

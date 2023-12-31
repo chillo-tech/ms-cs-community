@@ -2,7 +2,7 @@ import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import mailingService from '../mailing/mailing.service';
-import suggestService from './suggest.service';
+import suggestionsService from './suggestions.service';
 
 const templateMailToUser = readFileSync('./src/constants/mail/template-mail-to-user.html');
 const templateMailToAdmin = readFileSync('./src/constants/mail/template-mail-to-admin.html');
@@ -11,7 +11,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
   try {
     // store suggestion
-    const suggest = await suggestService.create({
+    const suggest = await suggestionsService.create({
       author,
       description,
       title,
@@ -80,8 +80,8 @@ const makeSuggestion = async (req: Request, res: Response) => {
   }
 };
 
-const suggestController = {
+const suggestionsController = {
   makeSuggestion,
 };
 
-export default suggestController;
+export default suggestionsController;

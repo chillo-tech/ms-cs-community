@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import validate from '../../middlewares/requestValidation';
-import suggestZodSchema from './suggest.zod';
+import suggestionsZodSchema from './suggestions.zod';
 import { authToken } from '../../middlewares/jwt';
-import suggestController from './suggest.controller';
+import suggestionsController from './suggestions.controller';
 
 const router = Router();
 
@@ -12,8 +12,8 @@ router.use(authToken);
 router
   .route('/')
   .post(
-    validate(suggestZodSchema.createSuggestSchema),
-    suggestController.makeSuggestion
+    validate(suggestionsZodSchema.createSuggestionsSchema),
+    suggestionsController.makeSuggestion
   );
 
 export default router;

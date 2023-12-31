@@ -1,9 +1,9 @@
 import config from 'config';
 import { ZodEnum, array, boolean, number, object, string } from 'zod';
-import { tags } from '../../constants/suggest/tags';
+import { tags } from '../../constants/suggestions/tags';
 
-class SuggestZodSchema {
-  createSuggestSchema = object({
+class SuggestionsZodSchema {
+  createSuggestionsSchema = object({
     body: object({
       author: object({
         name: string(),
@@ -26,5 +26,5 @@ class SuggestZodSchema {
   });
 }
 
-const suggestZodSchema = new SuggestZodSchema();
-export default suggestZodSchema;
+const suggestionsZodSchema = new SuggestionsZodSchema();
+export default suggestionsZodSchema;

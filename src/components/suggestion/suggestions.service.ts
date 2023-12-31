@@ -1,9 +1,9 @@
 import { SuggestionType } from '../../types/Suggest';
-import Suggest from './suggest.model';
+import Suggestions from './suggestions.model';
 
 const create = async (suggestion: SuggestionType) => {
   try {
-    const newSuggestion = await Suggest.create(suggestion);
+    const newSuggestion = await Suggestions.create(suggestion);
     return newSuggestion.toJSON();
   } catch (err) {
     console.log('something went wrong went creating a new suggestion', err);
@@ -11,8 +11,8 @@ const create = async (suggestion: SuggestionType) => {
   }
 };
 
-const suggestService = {
+const suggestionsService = {
   create,
 };
 
-export default suggestService;
+export default suggestionsService;
