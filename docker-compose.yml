@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  ms-cs-community:
+    container_name: ms-cs-community
+    # The official v2 Traefik docker image
+    image: ms-cs-community:latest
+    restart: always
+    ports:
+      # The HTTP port
+      - '8001:3000'
+
+    networks:
+      - applications-network
+networks:
+  applications-network:
+    external: true
+    name: applications-network
