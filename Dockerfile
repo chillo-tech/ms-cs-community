@@ -57,7 +57,6 @@ USER node
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 
-RUN npm install --global rimraf && npm install --global parcel-bundler
 
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
@@ -69,4 +68,4 @@ COPY --from=build /usr/src/app/build ./build
 EXPOSE 9000
 
 # Run the application.
-CMD npm run start
+CMD [ "node", "build/src/app.js" ]
