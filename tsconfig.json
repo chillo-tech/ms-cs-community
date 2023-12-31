@@ -11,12 +11,13 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "./src",
+    "moduleResolution": "node",
+    "paths": {
+      "@suggestion/*": ["components/suggestion/*"]
+    }
   },
   "include": ["**/*"],
-  "exclude": [
-    "node_modules",
-    "./dist/**/*",
-    "./build/**/*"
-  ]
+  "exclude": ["node_modules", "./dist/**/*", "./build/**/*"]
 }

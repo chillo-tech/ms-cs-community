@@ -1,6 +1,6 @@
 import config from 'config';
 import { ZodEnum, array, boolean, number, object, string } from 'zod';
-import { tags } from '../../constants/suggest/tags';
+import { tags } from '../../constants/suggestions/tags';
 
 class SuggestionsZodSchema {
   createSuggestionsSchema = object({
