@@ -67,5 +67,7 @@ COPY --from=build /usr/src/app/build ./build
 # Expose the port that the application listens on.
 EXPOSE 9000
 
+RUN ls -al
+
 # Run the application.
 CMD [ "node", "build/src/app.js" ]
