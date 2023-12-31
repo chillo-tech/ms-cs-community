@@ -8,6 +8,7 @@ FROM node:20-alpine AS final
 WORKDIR /app
 COPY --from=builder ./app/dist ./dist
 COPY package.json .
-COPY yarn.lock .
-RUN yarn install --production
-CMD [ "yarn", "start" ]
+COPY package-lock.json .
+RUN npm ci
+EXPOSE 9000
+CMD [ "npm", "run",  "start" ]
