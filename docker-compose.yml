@@ -11,6 +11,8 @@ services:
       - '8001:9000'
     environment:
       NODE_ENV: production
+      PORT: ${PORT}
+      MONGO_URL: ${MONGO_URL}
     networks:
       - applications-network
 networks:
