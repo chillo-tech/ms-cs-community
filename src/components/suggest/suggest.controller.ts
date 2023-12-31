@@ -39,7 +39,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     };
 
     const client = createDirectus(
-      process.env.DIRECTUS_API_URI || 'https://contacts.chillo.fr'
+      process.env.DIRECTUS_API_URI || ''
     )
       .with(rest())
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
