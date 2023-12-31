@@ -2,7 +2,6 @@ import 'module-alias/register';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import morgan from 'morgan';
 
 import { dbInit } from './components/db/connect';
 import jwtRouter from './components/jwt/jwt.routes';
@@ -18,8 +17,7 @@ app
       origin: '*',
     })
   )
-  .use(express.json())
-  .use(morgan('dev'));
+  .use(express.json());
 
 app.use('/api/v1/suggest',suggestionsRouter)
 app.use('/api/v1/tokens', jwtRouter)
