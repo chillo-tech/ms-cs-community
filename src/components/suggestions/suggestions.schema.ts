@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-export const suggestSchema = new Schema({
+export const suggestionsSchema = new Schema({
   author: {
     name: String,
     email: String,

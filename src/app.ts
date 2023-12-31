@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import favicon from 'serve-favicon';
 import { dbInit } from './components/db/connect';
 import jwtRouter from './components/jwt/jwt.routes';
-import suggestRouter from './components/suggestions/suggestions.routes';
+import suggestionsRouter from './components/suggestions/suggestions.routes';
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
   res.send('it works. Done by BrightkyEfoo');
 });
 
-app.use('/api/v1/suggest',suggestRouter)
+app.use('/api/v1/suggest',suggestionsRouter)
 app.use('/api/v1/tokens', jwtRouter)
 // Do your logic here
 
