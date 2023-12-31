@@ -17,6 +17,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       title,
     });
 
+    // A supprimer
     console.log('suggest', suggest);
 
     // make external API calls
