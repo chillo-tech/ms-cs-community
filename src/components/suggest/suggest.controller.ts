@@ -112,7 +112,6 @@ const makeSuggestion = async (req: Request, res: Response) => {
       phoneindex: suggest.author?.phoneIndex?.toString(),
       phone: suggest.author?.phone?.toString(),
       civility: suggest.author?.civility,
-      age: suggest.author?.age,
       title: suggest.title,
       description: suggest.description,
     };
