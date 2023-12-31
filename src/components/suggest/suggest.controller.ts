@@ -4,8 +4,8 @@ import { readFileSync } from 'fs';
 import mailingService from '../mailing/mailing.service';
 import suggestService from './suggest.service';
 
-const template1 = readFileSync('./src/constants/mail/template1.html');
-const template2 = readFileSync('./src/constants/mail/template2.html');
+const templateMailToUser = readFileSync('./src/constants/mail/template-mail-to-user.html');
+const templateMailToAdmin = readFileSync('./src/constants/mail/template-mail-to-admin.html');
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
@@ -52,7 +52,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const mailOptions = {
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      text: template1.toString(),
+      text: templateMailToUser.toString(),
     };
 
     // the send the mail
@@ -64,7 +64,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const mailingOptions2 = {
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
-      text: template2.toString(),
+      text: templateMailToAdmin.toString(),
     };
 
     // SEND EMAIL
