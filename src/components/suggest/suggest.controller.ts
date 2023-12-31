@@ -1,15 +1,11 @@
-import {
-  createDirectus,
-  createItem,
-  rest,
-  staticToken
-} from '@directus/sdk';
+import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
 import { Request, Response } from 'express';
+import { readFileSync } from 'fs';
 import mailingService from '../mailing/mailing.service';
 import suggestService from './suggest.service';
-import { msg1, msg2 } from '../../constants/mail/mailsTemplates';
 
-
+const template1 = readFileSync('./src/constants/mail/template1.html');
+const template2 = readFileSync('./src/constants/mail/template2.html');
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
@@ -38,9 +34,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       description: suggest.description,
     };
 
-    const client = createDirectus(
-      process.env.DIRECTUS_API_URI || ''
-    )
+    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
       .with(rest())
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
 
@@ -50,7 +44,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
         console.log('res', res);
       })
       .catch(err => {
-        console.log('err', err.errors[0].extensions);
+        console.log('err', err);
       });
 
     // send mail to confirm recption
@@ -58,7 +52,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const mailOptions = {
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      text: msg1,
+      text: template1.toString(),
     };
 
     // the send the mail
@@ -70,10 +64,16 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const mailingOptions2 = {
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
-      text: msg2(suggest.author?.name, suggest.title),
+      text: template2.toString(),
     };
+
     // SEND EMAIL
-    mailingService.send(mailingOptions2);
+    const mailParams = {
+      name: suggest.author?.name || '',
+      title: suggest.title,
+    };
+
+    mailingService.send(mailingOptions2, mailParams);
 
     res.json({ msg: 'success', suggest });
   } catch (e) {
