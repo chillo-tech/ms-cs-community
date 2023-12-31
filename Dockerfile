@@ -6,7 +6,7 @@ RUN yarn build
 
 FROM node:20-alpine AS final
 WORKDIR /app
-COPY --from=builder ./app/dist ./dist
+COPY --from=builder ./app/build ./build
 COPY package.json .
 COPY package-lock.json .
 RUN npm ci
