@@ -1,5 +1,5 @@
 import * as SibApiV3Sdk from '@getbrevo/brevo';
-import { SmallMailOptions } from '../../types/mails';
+import { SmallMailOptions } from '@entities/mails';
 
 const send = (mailOptions: SmallMailOptions, params?: any) => {
   let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();

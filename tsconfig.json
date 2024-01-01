@@ -12,11 +12,18 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "baseUrl": "./src",
     "moduleResolution": "node",
+    "baseUrl": ".",
     "paths": {
-      "@suggestion/*": ["components/suggestion/*"]
-    }
+      "@/*": ["src/*"],
+      "@constants/*": ["src/constants/*"],
+      "@components/*": ["src/components/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@types/*": ["src/types/*"],
+      "@entities/*": ["src/entities/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
+    },
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "./dist/**/*", "./build/**/*"]

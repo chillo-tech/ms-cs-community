@@ -5,7 +5,7 @@ import express from 'express';
 
 import { dbInit } from './components/db/connect';
 import jwtRouter from './components/jwt/jwt.routes';
-import suggestionsRouter from '@suggestion/suggestions.routes';
+import suggestionsRouter from '@components/suggestions/suggestions.routes';
 
 dotenv.config();
 
