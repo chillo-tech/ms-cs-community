@@ -1,4 +1,4 @@
-import { ZodEnum, array, boolean, number, object, string } from 'zod';
+import { ZodEnum, number, object, string } from 'zod';
 import { tags } from '@constants/suggestions/tags';
 
 class SuggestionsZodSchema {
