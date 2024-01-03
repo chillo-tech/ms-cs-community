@@ -121,7 +121,7 @@ jobs:
             rm -f ${{ env.FOLDER }}/.env
 
             echo BREVO_API_KEY=${{ secrets.BREVO_API_KEY }} >> ${{ env.FOLDER }}/.env
-            echo MONGO_URL=${{ secrets.BREVO_API_KEY }} >> ${{ env.FOLDER }}/.env
+            echo DB_URI=${{ secrets.DB_URI }} >> ${{ env.FOLDER }}/.env
             echo PORT=9000 >> ${{ env.FOLDER }}/.env
 
             docker rmi ${{env.IMAGE}}.${{env.IMAGE_VERSION}}

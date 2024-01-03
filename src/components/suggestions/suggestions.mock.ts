@@ -12,3 +12,5 @@ export const data = [
     description: 'lorem ipsum dolor sit amet. Et consectur!',
   },
 ];
+
+export {data}

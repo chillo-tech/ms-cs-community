@@ -12,7 +12,7 @@ const validate =
         params: req.params,
       });
       next();
-    } catch (error: any) {
+    } catch (error) {
       return res.status(400).json({
         message: 'something went wront on validation',
         error,
