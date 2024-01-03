@@ -2,13 +2,15 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Created with create-node-express-ts by BrightkyEfoo",
-  "main": "./dist/src/app.js",
+  "main": "./build/src/app.js",
   "scripts": {
+    "build": "rimraf build && npx tsc",
+    "prestart": "npm run build && npm run copy-files",
+    "start": "node build/src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "copy-files": "copyfiles -u 3 src/constants/mail/*.html build/src/constants/mail/",
-    "start": "npm run build && node build/src/app.js",
-    "build": "npm run clean && tsc && npm run copy-files",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "clean": "rimraf build/"
   },
   "keywords": [],
@@ -19,12 +21,15 @@
     "@types/config": "^3.3.2",
     "@types/cors": "^2.8.15",
     "@types/express": "^4.17.20",
-    "@types/jsonwebtoken": "^9.0.4",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.8.10",
     "@types/nodemailer": "^6.4.14",
     "@types/serve-favicon": "^2.5.7",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
     "copyfiles": "^2.4.1",
+    "eslint": "^8.56.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.2",
     "rimraf": "^5.0.5",
@@ -49,6 +54,13 @@
     "zod": "^3.22.4"
   },
   "_moduleAliases": {
-    "@suggestion": "build/src/components/suggestion"
+    "@suggestion": "build/src/components/suggestion",
+    "@constants": "build/src/constants",
+    "@components": "./build/src/components",
+    "@middlewares": "build/src/middlewares",
+    "@types": "build/src/types",
+    "@entities": "build/src/entities",
+    "@services": "build/src/services",
+    "@utils": "build/src/utils"
   }
 }

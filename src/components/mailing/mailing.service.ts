@@ -1,15 +1,17 @@
 import * as SibApiV3Sdk from '@getbrevo/brevo';
-import { SmallMailOptions } from '../../types/mails';
-
-const send = (mailOptions: SmallMailOptions, params?: any) => {
-  let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+import { SmallMailOptions } from '@entities/mails';
+type TokenData = {
+  [key: string]: string | null | undefined
+}
+const send = (mailOptions: SmallMailOptions, params?: TokenData) => {
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
   apiInstance.setApiKey(
     SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
     process.env.BREVO_API_KEY || ''
   );
 
-  let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
   sendSmtpEmail.subject = mailOptions.subject;
   sendSmtpEmail.htmlContent = mailOptions.text;
   sendSmtpEmail.sender = {
@@ -25,7 +27,7 @@ const send = (mailOptions: SmallMailOptions, params?: any) => {
   sendSmtpEmail.params = params;
 
   apiInstance.sendTransacEmail(sendSmtpEmail).then(
-    function (data) {
+    function () {
       console.log('API called successfully.');
     },
     function (error) {

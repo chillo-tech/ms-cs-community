@@ -1,6 +1,5 @@
-import config from 'config';
-import { ZodEnum, array, boolean, number, object, string } from 'zod';
-import { tags } from '../../constants/suggestions/tags';
+import { tags } from '@constants/suggestions';
+import { ZodEnum, number, object, string } from 'zod';
 
 class SuggestionsZodSchema {
   createSuggestionsSchema = object({

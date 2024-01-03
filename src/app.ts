@@ -2,11 +2,10 @@ import 'module-alias/register';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import morgan from 'morgan';
 
-import { dbInit } from './components/db/connect';
-import jwtRouter from './components/jwt/jwt.routes';
-import suggestionsRouter from '@suggestion/suggestions.routes';
+import { dbInit } from '@components/db/connect';
+import jwtRouter from '@components/jwt/jwt.routes';
+import suggestionsRouter from '@components/suggestions/suggestions.routes';
 
 dotenv.config();
 
@@ -18,15 +17,14 @@ app
       origin: '*',
     })
   )
-  .use(express.json())
-  .use(morgan('dev'));
+  .use(express.json());
 
-app.use('/api/v1/suggest',suggestionsRouter)
-app.use('/api/v1/tokens', jwtRouter)
+app.use('/api/v1/suggest', suggestionsRouter);
+app.use('/api/v1/tokens', jwtRouter);
 // Do your logic here
 
 app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
-  const res = await dbInit()
-  if(res) console.log('succesfully connected to mongodb')
+  const res = await dbInit();
+  if (res) console.log('succesfully connected to mongodb');
 });

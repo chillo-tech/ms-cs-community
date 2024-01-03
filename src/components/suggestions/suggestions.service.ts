@@ -1,4 +1,4 @@
-import { SuggestionType } from '../../types/Suggest';
+import { SuggestionType } from '@entities/Suggest';
 import Suggestions from './suggestions.model';
 
 const create = async (suggestion: SuggestionType) => {

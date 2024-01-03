@@ -1,4 +1,4 @@
-const data = [
+export const data = [
   {
     author: {
       name: 'John DOE',
