@@ -56,7 +56,7 @@
   "_moduleAliases": {
     "@suggestion": "build/src/components/suggestion",
     "@constants": "build/src/constants",
-    "@components": "build/src/components",
+    "@components": "./build/src/components",
     "@middlewares": "build/src/middlewares",
     "@types": "build/src/types",
     "@entities": "build/src/entities",
