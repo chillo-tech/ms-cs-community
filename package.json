@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "rimraf build && npx tsc",
-    "prestart": "npm run build",
-    "start": "node build/app.js",
+    "prestart": "npm run build && npm run copy-files",
+    "start": "node build/src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "copy-files": "copyfiles -u 3 src/constants/mail/*.html build/src/constants/mail/",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
@@ -55,6 +55,10 @@
     "zod": "^3.22.4"
   },
   "_moduleAliases": {
-    "@suggestion": "build/src/components/suggestion"
+    "@suggestion": "./build/src/components/suggestion",
+    "@constants": "./build/src/constants",
+    "@components": "build/components/db",
+    "@middlewares": "./build/src/middlewares",
+    "@entities": "./build/src/entities"
   }
 }
