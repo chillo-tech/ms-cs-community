@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Created with create-node-express-ts by BrightkyEfoo",
-  "main": "./dist/src/app.js",
+  "main": "./build/src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "copy-files": "copyfiles -u 3 src/constants/mail/*.html build/src/constants/mail/",
@@ -49,6 +49,13 @@
     "zod": "^3.22.4"
   },
   "_moduleAliases": {
-    "@suggestion": "build/src/components/suggestion"
+    "@suggestion": "build/src/components/suggestion",
+    "@constants": "build/src/constants",
+    "@components": "build/src/components",
+    "@middlewares": "build/src/middlewares",
+    "@types": "build/src/types",
+    "@entities": "build/src/entities",
+    "@services": "build/src/services",
+    "@utils": "build/src/utils"
   }
 }

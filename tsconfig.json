@@ -15,7 +15,6 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
       "@constants/*": ["src/constants/*"],
       "@components/*": ["src/components/*"],
       "@middlewares/*": ["src/middlewares/*"],
