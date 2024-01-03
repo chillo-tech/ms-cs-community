@@ -6,6 +6,7 @@ import express from 'express';
 import { dbInit } from '@components/db/connect';
 import jwtRouter from '@components/jwt/jwt.routes';
 import suggestionsRouter from '@components/suggestions/suggestions.routes';
+import newslettersRouter from '@components/newsletters/newsletters.routes';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app
   .use(express.json());
 
 app.use('/api/v1/suggest', suggestionsRouter);
+app.use('/api/v1/newsletters', newslettersRouter);
 app.use('/api/v1/tokens', jwtRouter);
 // Do your logic here
 
