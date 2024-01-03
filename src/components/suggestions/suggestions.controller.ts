@@ -1,8 +1,8 @@
 import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
+import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
-import suggestionsService from '@components/suggestions/suggestions.service';
 
 const templateMailToUser = readFileSync('src/constants/mail/template-mail-to-user.html');
 const templateMailToAdmin = readFileSync('src/constants/mail/template-mail-to-admin.html');
