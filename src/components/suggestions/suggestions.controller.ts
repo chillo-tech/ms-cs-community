@@ -4,8 +4,8 @@ import { readFileSync } from 'fs';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
 
-const templateMailToUser = readFileSync('src/constants/mail/template-mail-to-user.html');
-const templateMailToAdmin = readFileSync('src/constants/mail/template-mail-to-admin.html');
+const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
+const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
