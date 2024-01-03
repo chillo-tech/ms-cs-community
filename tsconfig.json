@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "lib": ["es6"],
+    "target": "ES2020",
+    "lib": ["es6", "es2020"],
     "module": "commonjs",
     "rootDir": ".",
     "resolveJsonModule": true,
@@ -21,9 +21,50 @@
       "@types/*": ["src/types/*"],
       "@entities/*": ["src/entities/*"],
       "@services/*": ["src/services/*"],
-      "@utils/*": ["src/utils/*"],
-    },
+      "@utils/*": ["src/utils/*"]
+    }
   },
   "include": ["**/*"],
   "exclude": ["node_modules", "./dist/**/*", "./build/**/*"]
 }
+
+// {
+//   "compilerOptions": {
+//     "target": "ES2016",
+//     "useDefineForClassFields": true,
+//     "lib": ["ES6"],
+//     "module": "CommonJS",
+//     "skipLibCheck": true,
+
+//     "rootDir": ".",
+
+//     /* Bundler mode */
+//     // "moduleResolution": "bundler",
+//     //"allowImportingTsExtensions": true,
+//     // "resolveJsonModule": true,
+//     // "isolatedModules": true,
+//     //"noEmit": true,
+
+//     /* Linting */
+//     "strict": true,
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "noFallthroughCasesInSwitch": true,
+//     "baseUrl": ".",
+//     "allowJs": true,
+//     "outDir": "./build",
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "noImplicitAny": true,
+//     "paths": {
+//       "@constants/*": ["src/constants/*"],
+//       "@components/*": ["src/components/*"],
+//       "@middlewares/*": ["src/middlewares/*"],
+//       "@types/*": ["src/types/*"],
+//       "@entities/*": ["src/entities/*"],
+//       "@services/*": ["src/services/*"],
+//       "@utils/*": ["src/utils/*"]
+//     }
+//   },
+//   "include": ["src"]
+// }
