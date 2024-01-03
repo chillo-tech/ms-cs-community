@@ -62,7 +62,8 @@
       "@types/*": ["src/types/*"],
       "@entities/*": ["src/entities/*"],
       "@services/*": ["src/services/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@views/*": ["src/views/*"]
     }
   },
   "include": ["**/*"],

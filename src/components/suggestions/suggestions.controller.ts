@@ -1,11 +1,13 @@
 import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
 import { Request, Response } from 'express';
-import { readFileSync } from 'fs';
+//import { readFileSync } from 'fs';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
+import confirmationTemplate from "@views/confirmation.handlebars";
+import Handlebars from "handlebars";
 
-const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
-const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
+//const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
+//const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
@@ -47,10 +49,12 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     // send mail to confirm recption
     // first configure mailingOptions Obj
+    const template = Handlebars.compile(confirmationTemplate);
+
     const mailOptions = {
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      text: templateMailToUser.toString(),
+      text: template({}),
     };
 
     // the send the mail
@@ -62,7 +66,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const mailingOptions2 = {
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
-      text: templateMailToAdmin.toString(),
+      text: template({}),
     };
 
     // SEND EMAIL
