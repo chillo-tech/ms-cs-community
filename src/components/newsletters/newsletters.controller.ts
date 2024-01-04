@@ -6,21 +6,27 @@ import {
   staticToken,
 } from '@directus/sdk';
 import { Request, Response } from 'express';
+import querystring from 'querystring';
 import { readFileSync } from 'fs';
 import newsLettersService from './newsletters.service';
 import mailingService from '@components/mailing/mailing.service';
+import Handlebars from 'handlebars';
 
 const templateMailToUserSubscribe = readFileSync(
-  'src/constants/mail/newsletters/template-mail-to-user-subscribe.html'
+  'src/mailsTemplates/newsletters/subscribe/template-mail-to-user.hbs',
+  'utf-8'
 );
 const templateMailToAdminSubscribe = readFileSync(
-  'src/constants/mail/newsletters/template-mail-to-admin-subscribe.html'
+  'src/mailsTemplates/newsletters/subscribe/template-mail-to-admin.hbs',
+  'utf-8'
 );
 const templateMailToUserUnsubscribe = readFileSync(
-  'src/constants/mail/newsletters/template-mail-to-user-unsubscribe.html'
+  'src/mailsTemplates/newsletters/unsubscribe/template-mail-to-user.hbs',
+  'utf-8'
 );
 const templateMailToAdminUnsubscribe = readFileSync(
-  'src/constants/mail/newsletters/template-mail-to-admin-unsubscribe.html'
+  'src/mailsTemplates/newsletters/unsubscribe/template-mail-to-admin.hbs',
+  'utf-8'
 );
 
 const registerNewUser = async (req: Request, res: Response) => {
@@ -53,37 +59,45 @@ const registerNewUser = async (req: Request, res: Response) => {
     }
 
     // send mail to confirm recption
-    // first configure mailingOptions Obj
-    const mailOptions = {
+
+    const qs = querystring.encode({
+      name: (name as string).replaceAll(' ', '%20'),
+      email,
+      directusKey,
+    });
+    console.log('qs', qs);
+    console.log('name', (name as string).replaceAll(' ', '%20'));
+    const unsubscribeLink = `http://localhost:9000/newsletters/unsubscribe?${querystring.encode(
+      {
+        name: (name as string).replaceAll(' ', '%20'),
+        email,
+        directusKey,
+      }
+    )}`;
+    console.log('unsubscribeLink', unsubscribeLink);
+
+    const template1 = Handlebars.compile(templateMailToUserSubscribe);
+    const parsedMail1 = template1({ unsubscribeLink });
+    // the send the mail
+    mailingService.send2({
       to: email,
       subject:
         'Nous avons bien reçu votre enregistrement aux newsletters, Merci!',
-      text: templateMailToUserSubscribe.toString(),
-    };
-    const unsubscribeLink = `http://localhost:9000/newsletters/unsubscribe?name=${name}&email=${email}&directusKey=${directusKey}`;
-    const mailParams1 = {
-      unsubscribeLink,
-    };
-
-    // the send the mail
-    // console.log('mailingOptions', mailOptions);
-    mailingService.send(mailOptions, mailParams1);
+      html: parsedMail1,
+    });
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const mailingOptions2 = {
+    const template2 = Handlebars.compile(templateMailToAdminSubscribe);
+
+    const parsedMail2 = template2({ name, email });
+    // SEND EMAIL
+
+    mailingService.send2({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvel utilisateur pour les newsletters!',
-      text: templateMailToAdminSubscribe.toString(),
-    };
-
-    // SEND EMAIL
-    const mailParams2 = {
-      name,
-      email,
-    };
-
-    mailingService.send(mailingOptions2, mailParams2);
+      html: parsedMail2,
+    });
 
     res.json({ msg: 'success', user });
   } catch (e) {
@@ -96,7 +110,7 @@ const unsubscribe = async (req: Request, res: Response) => {
   const { name, email, directusKey } = req.query;
   try {
     // delete user
-    const user = await newsLettersService.remove(email);
+    const user = await newsLettersService.remove(email as string);
 
     // make external API calls
 
@@ -105,7 +119,7 @@ const unsubscribe = async (req: Request, res: Response) => {
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
 
     client
-      .request(deleteItem('newslettersUser', directusKey))
+      .request(deleteItem('newslettersUser', directusKey as string))
       .then(res => {
         console.log('res', res);
       })
@@ -115,32 +129,28 @@ const unsubscribe = async (req: Request, res: Response) => {
 
     // send mail to confirm recption
     // first configure mailingOptions Obj
-    const mailOptions = {
-      to: email,
+    const template1 = Handlebars.compile(templateMailToUserUnsubscribe);
+    const parsedMail1 = template1({});
+    // the send the mail
+    mailingService.send2({
+      to: email as string,
       subject:
         'Nous avons bien reçu votre desabonnement aux newsletters, Merci!',
-      text: templateMailToUserUnsubscribe.toString(),
-    };
-
-    // the send the mail
-    // console.log('mailingOptions', mailOptions);
-    mailingService.send(mailOptions);
+      html: parsedMail1,
+    });
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const mailingOptions2 = {
+    const template2 = Handlebars.compile(templateMailToAdminUnsubscribe);
+
+    const parsedMail2 = template2({ name, email });
+    // SEND EMAIL
+
+    mailingService.send2({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
-      text: templateMailToAdminUnsubscribe.toString(),
-    };
-
-    // SEND EMAIL
-    const mailParams2 = {
-      name,
-      email,
-    };
-
-    mailingService.send(mailingOptions2, mailParams2);
+      html: parsedMail2,
+    });
 
     res.json({ msg: 'success', user });
   } catch (e) {
