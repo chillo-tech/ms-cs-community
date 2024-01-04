@@ -1,5 +1,6 @@
 import {
   createDirectus,
+  createItem,
   // createItem,
   deleteItem,
   rest,
@@ -40,30 +41,30 @@ const registerNewUser = async (req: Request, res: Response) => {
 
     // make external API calls
 
-    // const tempObj = {
-    //   name: user.name,
-    //   email: user.email,
-    // };
+    const tempObj = {
+      name: user.name,
+      email: user.email,
+    };
 
-    // const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-    //   .with(rest())
-    //   .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-    // let directusKey: string = '';
-    // try {
-    //   const directusRes = await client.request(
-    //     createItem('newslettersUser', tempObj)
-    //   );
-    //   directusKey += directusRes.id;
-    // } catch (error) {
-    //   console.log('failed to add a new user');
-    // }
+    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
+      .with(rest())
+      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
+    let directusKey: string = '';
+    try {
+      const directusRes = await client.request(
+        createItem('newslettersUser', tempObj)
+      );
+      directusKey += directusRes.id;
+    } catch (error) {
+      console.log('failed to add a new user');
+    }
 
     // send mail to confirm recption
 
     const qs = querystring.encode({
       name: (name as string).replaceAll(' ', '%20'),
       email,
-      // directusKey,
+      directusKey,
     });
     console.log('qs', qs);
     console.log('name', (name as string).replaceAll(' ', '%20'));
@@ -71,7 +72,7 @@ const registerNewUser = async (req: Request, res: Response) => {
       {
         name: (name as string).replaceAll(' ', '%20'),
         email,
-        // directusKey,
+        directusKey,
       }
     )}`;
     console.log('unsubscribeLink', unsubscribeLink);
