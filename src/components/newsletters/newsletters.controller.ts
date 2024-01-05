@@ -1,3 +1,4 @@
+import mailingService from '@components/mailing/mailing.service';
 import {
   createDirectus,
   createItem,
@@ -6,27 +7,38 @@ import {
   rest,
   staticToken,
 } from '@directus/sdk';
+import dotenv from 'dotenv';
 import { Request, Response } from 'express';
-import querystring from 'querystring';
 import { readFileSync } from 'fs';
-import newsLettersService from './newsletters.service';
-import mailingService from '@components/mailing/mailing.service';
 import Handlebars from 'handlebars';
+import querystring from 'querystring';
+import newsLettersService from './newsletters.service';
+
+// dotenv.config();
+if (process.env && process.env.NODE_ENV === 'test') {
+  dotenv.config({ path: '.env.test' });
+} else {
+  dotenv.config({ path: '.env' });
+}
 
 const templateMailToUserSubscribe = readFileSync(
-  'src/mailsTemplates/newsletters/subscribe/template-mail-to-user.hbs',
+  process.env.PATH_TO_MAILS_TEMPLATES +
+    'newsletters/subscribe/template-mail-to-user.hbs',
   'utf-8'
 );
 const templateMailToAdminSubscribe = readFileSync(
-  'src/mailsTemplates/newsletters/subscribe/template-mail-to-admin.hbs',
+  process.env.PATH_TO_MAILS_TEMPLATES +
+    'newsletters/subscribe/template-mail-to-admin.hbs',
   'utf-8'
 );
 const templateMailToUserUnsubscribe = readFileSync(
-  'src/mailsTemplates/newsletters/unsubscribe/template-mail-to-user.hbs',
+  process.env.PATH_TO_MAILS_TEMPLATES +
+    'newsletters/unsubscribe/template-mail-to-user.hbs',
   'utf-8'
 );
 const templateMailToAdminUnsubscribe = readFileSync(
-  'src/mailsTemplates/newsletters/unsubscribe/template-mail-to-admin.hbs',
+  process.env.PATH_TO_MAILS_TEMPLATES +
+    'newsletters/unsubscribe/template-mail-to-admin.hbs',
   'utf-8'
 );
 
@@ -41,23 +53,23 @@ const registerNewUser = async (req: Request, res: Response) => {
 
     // make external API calls
 
-    const tempObj = {
-      name: user.name,
-      email: user.email,
-    };
+    // const tempObj = {
+    //   name: user.name,
+    //   email: user.email,
+    // };
+    const directusKey = '';
 
-    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-      .with(rest())
-      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-    let directusKey: string = '';
-    try {
-      const directusRes = await client.request(
-        createItem('newslettersUser', tempObj)
-      );
-      directusKey += directusRes.id;
-    } catch (error) {
-      console.log('failed to add a new user');
-    }
+    // const client = createDirectus(process.env.DIRECTUS_API_URI || '')
+    //   .with(rest())
+    //   .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
+    // try {
+    //   const directusRes = await client.request(
+    //     createItem('newslettersUser', tempObj)
+    //   );
+    //   directusKey += directusRes.id;
+    // } catch (error) {
+    //   console.log('failed to add a new user');
+    // }
 
     // send mail to confirm recption
 
@@ -68,7 +80,7 @@ const registerNewUser = async (req: Request, res: Response) => {
     });
     console.log('qs', qs);
     console.log('name', (name as string).replaceAll(' ', '%20'));
-    const unsubscribeLink = `http://localhost:9000/newsletters/unsubscribe?${querystring.encode(
+    const unsubscribeLink = `http://localhost:9000/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
         name: (name as string).replaceAll(' ', '%20'),
         email,
