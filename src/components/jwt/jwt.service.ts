@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import { privateKey } from './private_key';
 
-const createToken = () => {
+const createToken = (duration?: string,) => {
   const token = jwt.sign(
     {
       appName: 'SuggestSystem',
     },
     privateKey,
-    { expiresIn: '1y' }
+    { expiresIn: duration || '1y' }
   );
 
   return token;

@@ -3,9 +3,24 @@ import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
+import dotenv from 'dotenv';
+import Handlebars from 'handlebars';
 
-const templateMailToUser = readFileSync('src/constants/mail/template-mail-to-user.html');
-const templateMailToAdmin = readFileSync('src/constants/mail/template-mail-to-admin.html');
+if (process.env && process.env.NODE_ENV === 'test') {
+  dotenv.config({ path: '.env.test' });
+} else {
+  dotenv.config({ path: '.env' });
+}
+
+const templateMailToUser = readFileSync(
+  process.env.PATH_TO_MAILS_TEMPLATES + 'suggestions/template-mail-to-user.hbs',
+  'utf-8'
+);
+const templateMailToAdmin = readFileSync(
+  process.env.PATH_TO_MAILS_TEMPLATES +
+    'suggestions/template-mail-to-admin.hbs',
+  'utf-8'
+);
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
@@ -46,32 +61,31 @@ const makeSuggestion = async (req: Request, res: Response) => {
       });
 
     // send mail to confirm recption
-    // first configure mailingOptions Obj
-    const mailOptions = {
-      to: author.email,
-      subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      text: templateMailToUser.toString(),
-    };
+    const template1 = Handlebars.compile(templateMailToUser);
+    const parsedMail1 = template1({});
 
     // the send the mail
-    // console.log('mailingOptions', mailOptions);
-    mailingService.send(mailOptions);
+    mailingService.send2({
+      to: author.email,
+      subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
+      html: parsedMail1,
+    });
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const mailingOptions2 = {
-      to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
-      subject: 'Nouvelle suggestion de contenu!',
-      text: templateMailToAdmin.toString(),
-    };
+    const template2 = Handlebars.compile(templateMailToAdmin);
 
-    // SEND EMAIL
-    const mailParams = {
+    const parsedMail2 = template2({
       name: suggest.author?.name || '',
       title: suggest.title,
-    };
+    });
+    // SEND EMAIL
 
-    mailingService.send(mailingOptions2, mailParams);
+    mailingService.send2({
+      to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
+      subject: 'Nouvelle suggestion de contenu!',
+      html: parsedMail2,
+    });
 
     res.json({ msg: 'success', suggest });
   } catch (e) {

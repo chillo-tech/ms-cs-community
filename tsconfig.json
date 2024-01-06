@@ -25,5 +25,11 @@
     }
   },
   "include": ["**/*"],
-  "exclude": ["node_modules", "./dist/**/*", "./build/**/*" , "./babel.config.js"]
+  "exclude": [
+    "node_modules",
+    "./dist/**/*",
+    "./build/**/*",
+    "./babel.config.js",
+    "gulpfile.js"
+  ]
 }

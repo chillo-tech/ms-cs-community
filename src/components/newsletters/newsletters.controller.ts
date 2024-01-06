@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import mailingService from '@components/mailing/mailing.service';
 import {
   createDirectus,
   createItem,
-  // createItem,
   deleteItem,
   rest,
   staticToken,
@@ -13,6 +13,7 @@ import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
+import jwtService from '@components/jwt/jwt.service';
 
 // dotenv.config();
 if (process.env && process.env.NODE_ENV === 'test') {
@@ -53,38 +54,36 @@ const registerNewUser = async (req: Request, res: Response) => {
 
     // make external API calls
 
-    // const tempObj = {
-    //   name: user.name,
-    //   email: user.email,
-    // };
-    const directusKey = '';
+    const tempObj = {
+      name: user.name,
+      email: user.email,
+      tags: 'newsletter',
+    };
+    let directusKey = '';
 
-    // const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-    //   .with(rest())
-    //   .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-    // try {
-    //   const directusRes = await client.request(
-    //     createItem('newslettersUser', tempObj)
-    //   );
-    //   directusKey += directusRes.id;
-    // } catch (error) {
-    //   console.log('failed to add a new user');
-    // }
+    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
+      .with(rest())
+      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
+    try {
+      const directusRes = await client.request(createItem('contact', tempObj));
+      console.log('directusRes', directusRes);
+      directusKey = `${directusRes.id}`;
+      console.log('directusKey', directusKey);
+    } catch (error) {
+      console.log('failed to add a new user');
+    }
 
     // send mail to confirm recption
 
-    const qs = querystring.encode({
-      name: (name as string).replaceAll(' ', '%20'),
-      email,
-      directusKey,
-    });
-    console.log('qs', qs);
-    console.log('name', (name as string).replaceAll(' ', '%20'));
+    const token =
+      'Bearer ' +
+      jwtService.createToken('24h');
     const unsubscribeLink = `http://localhost:9000/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
-        name: (name as string).replaceAll(' ', '%20'),
+        name: name as string,
         email,
         directusKey,
+        token,
       }
     )}`;
     console.log('unsubscribeLink', unsubscribeLink);
@@ -119,7 +118,10 @@ const registerNewUser = async (req: Request, res: Response) => {
   }
 };
 
-const unsubscribe = async (req: Request, res: Response) => {
+const unsubscribe = async (
+  req: Request,
+  res: Response
+) => {
   const { name, email, directusKey } = req.query;
   try {
     // delete user
@@ -132,7 +134,7 @@ const unsubscribe = async (req: Request, res: Response) => {
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
 
     client
-      .request(deleteItem('newslettersUser', directusKey as string))
+      .request(deleteItem('contact', directusKey as string))
       .then(res => {
         console.log('res', res);
       })
@@ -164,8 +166,13 @@ const unsubscribe = async (req: Request, res: Response) => {
       subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
       html: parsedMail2,
     });
+    console.log('user', user);
 
-    res.json({ msg: 'success', user });
+    // res.json({ msg: 'success', user });
+    res.redirect(
+      (process.env.FRONTEND_URI || 'https://chillo.tech/') +
+        '/newsletters-unsubscribe'
+    );
   } catch (e) {
     console.log('e', e);
     res.json({ msg: 'something went wrong' });
