@@ -1,4 +1,4 @@
-import { tags } from '@constants/suggestions';
+import { POSITIONS } from '@constants/suggestions';
 import { ZodEnum, number, object, string } from 'zod';
 
 class SuggestionsZodSchema {
@@ -7,7 +7,7 @@ class SuggestionsZodSchema {
       author: object({
         name: string(),
         email: string().email(),
-        tag: ZodEnum.create(tags)
+        tag: ZodEnum.create(POSITIONS)
           .array()
           .min(1, 'you should provide at least one tag')
           .optional(),
