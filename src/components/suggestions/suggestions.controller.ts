@@ -1,12 +1,9 @@
-import mailingService from '@components/mailing/mailing.service';
 import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
-import { initEnv } from '@utils/initEnvIronementVariables';
 import { Request, Response } from 'express';
 //import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
-import Handlebars from 'handlebars';
 import fs from 'fs';
 import path from 'path';
 //const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
@@ -70,7 +67,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const template2 = Handlebars.compile(templateMailToAdmin);
+    const template2 = Handlebars.compile(confirmationTemplate);
 
     const parsedMail2 = template2({
       name: suggest.author?.name || '',
@@ -81,16 +78,8 @@ const makeSuggestion = async (req: Request, res: Response) => {
     mailingService.send2({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
-      text: template({}),
-    };
-
-    // SEND EMAIL
-    const mailParams = {
-      name: suggest.author?.name || '',
-      title: suggest.title,
-    };
-
-    mailingService.send(mailingOptions2, mailParams);
+      html: parsedMail2,
+    });
 
     res.json({ msg: 'success', suggest });
   } catch (e) {

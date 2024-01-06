@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import jwtService from '@components/jwt/jwt.service';
 import mailingService from '@components/mailing/mailing.service';
 import {
@@ -13,25 +12,25 @@ import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
-import path from "path";
+import path from 'path';
 import { initEnv } from '@utils/initEnvIronementVariables';
 
 initEnv();
 
 const templateMailToUserSubscribe = readFileSync(
-    path.join(__dirname, "../../views/newsletters/template-mail-to-user.hbs"),
+  path.join(__dirname, '../../views/newsletters/template-mail-to-user.hbs'),
   'utf-8'
 );
 const templateMailToAdminSubscribe = readFileSync(
-  path.join(__dirname, "../../views/newsletters/template-mail-to-admin.hbs"),
+  path.join(__dirname, '../../views/newsletters/template-mail-to-admin.hbs'),
   'utf-8'
 );
 const templateMailToUserUnsubscribe = readFileSync(
-  path.join(__dirname, "../../views/newsletters/template-mail-to-user.hbs"),
+  path.join(__dirname, '../../views/newsletters/template-mail-to-user.hbs'),
   'utf-8'
 );
 const templateMailToAdminUnsubscribe = readFileSync(
-    path.join(__dirname, "../../views/newsletters/template-mail-to-admin.hbs"),
+  path.join(__dirname, '../../views/newsletters/template-mail-to-admin.hbs'),
   'utf-8'
 );
 
