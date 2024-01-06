@@ -3,12 +3,15 @@ import { Request, Response } from 'express';
 //import { readFileSync } from 'fs';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
-import Handlebars from "handlebars";
-import fs from "fs";
-import path from "path";
+import Handlebars from 'handlebars';
+import fs from 'fs';
+import path from 'path';
 //const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
 //const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
-const confirmationTemplate = fs.readFileSync(path.join(__dirname, "views/confirmation.handlebars"), "utf8")
+const confirmationTemplate = fs.readFileSync(
+  path.join(__dirname, '../../views/all/confirmation.hbs'),
+  'utf-8'
+);
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;

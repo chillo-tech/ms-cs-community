@@ -11,6 +11,7 @@ import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
+import path from "path";
 
 // dotenv.config();
 if (process.env && process.env.NODE_ENV === 'test') {
@@ -20,23 +21,19 @@ if (process.env && process.env.NODE_ENV === 'test') {
 }
 
 const templateMailToUserSubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/subscribe/template-mail-to-user.hbs',
+    path.join(__dirname, "../../views/newsletters/template-mail-to-user.hbs"),
   'utf-8'
 );
 const templateMailToAdminSubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/subscribe/template-mail-to-admin.hbs',
+  path.join(__dirname, "../../views/newsletters/template-mail-to-admin.hbs"),
   'utf-8'
 );
 const templateMailToUserUnsubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/unsubscribe/template-mail-to-user.hbs',
+  path.join(__dirname, "../../views/newsletters/template-mail-to-user.hbs"),
   'utf-8'
 );
 const templateMailToAdminUnsubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/unsubscribe/template-mail-to-admin.hbs',
+    path.join(__dirname, "../../views/newsletters/template-mail-to-admin.hbs"),
   'utf-8'
 );
 
