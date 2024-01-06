@@ -2,17 +2,12 @@ import 'module-alias/register';
 import jwtRouter from '@components/jwt/jwt.routes';
 import newslettersRouter from '@components/newsletters/newsletters.routes';
 import suggestionsRouter from '@components/suggestions/suggestions.routes';
+import { initEnv } from '@utils/initEnvIronementVariables';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
  const PREFIX = 'api';
  const VERSION = 'v1';
-// dotenv.config();
-if (process.env && process.env.NODE_ENV === 'test') {
-  dotenv.config({ path: '.env.test' });
-} else {
-  dotenv.config({ path: '.env' });
-}
+initEnv()
 
 export const port = process.env.PORT || 9000;
 const app = express();
