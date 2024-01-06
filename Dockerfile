@@ -42,6 +42,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 COPY . .
 # Run the build script.
 RUN npm run build
+RUN npm run copy-html-files
+RUN npm run copy-views-files
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
