@@ -1,8 +1,10 @@
 import * as SibApiV3Sdk from '@getbrevo/brevo';
 import { SmallMailOptions } from '@entities/mails';
+import { transporter } from './mailing.config';
+
 type TokenData = {
-  [key: string]: string | null | undefined
-}
+  [key: string]: string | null | undefined;
+};
 const send = (mailOptions: SmallMailOptions, params?: TokenData) => {
   const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
@@ -36,8 +38,31 @@ const send = (mailOptions: SmallMailOptions, params?: TokenData) => {
   );
 };
 
+const send2 = ({
+  to,
+  subject,
+  html,
+}: {
+  to: string;
+  subject: string;
+  html: string;
+}) => {
+  try {
+    transporter.sendMail({
+      from : process.env.OWNER_EMAIL,
+      to,
+      subject,
+      html,
+    });
+    console.log('email sent succesfully');
+  } catch (err) {
+    console.log('failed to send email', err);
+  }
+};
+
 const mailingService = {
   send,
+  send2,
 };
 
 export default mailingService;
