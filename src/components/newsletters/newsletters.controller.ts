@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import jwtService from '@components/jwt/jwt.service';
 import mailingService from '@components/mailing/mailing.service';
 import {
   createDirectus,
@@ -7,20 +8,14 @@ import {
   rest,
   staticToken,
 } from '@directus/sdk';
-import dotenv from 'dotenv';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
-import jwtService from '@components/jwt/jwt.service';
+import { initEnv } from '@utils/initEnvIronementVariables';
 
-// dotenv.config();
-if (process.env && process.env.NODE_ENV === 'test') {
-  dotenv.config({ path: '.env.test' });
-} else {
-  dotenv.config({ path: '.env' });
-}
+initEnv();
 
 const templateMailToUserSubscribe = readFileSync(
   process.env.PATH_TO_MAILS_TEMPLATES +
@@ -75,9 +70,7 @@ const registerNewUser = async (req: Request, res: Response) => {
 
     // send mail to confirm recption
 
-    const token =
-      'Bearer ' +
-      jwtService.createToken('24h');
+    const token = 'Bearer ' + jwtService.createToken('24h');
     const unsubscribeLink = `http://localhost:9000/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
         name: name as string,
@@ -114,14 +107,11 @@ const registerNewUser = async (req: Request, res: Response) => {
     res.json({ msg: 'success', user });
   } catch (e) {
     console.log('e', e);
-    res.json({ msg: 'something went wrong' });
+    res.status(400).json({ msg: 'something went wrong' });
   }
 };
 
-const unsubscribe = async (
-  req: Request,
-  res: Response
-) => {
+const unsubscribe = async (req: Request, res: Response) => {
   const { name, email, directusKey } = req.query;
   try {
     // delete user
@@ -175,7 +165,7 @@ const unsubscribe = async (
     );
   } catch (e) {
     console.log('e', e);
-    res.json({ msg: 'something went wrong' });
+    res.status(400).json({ msg: 'something went wrong' });
   }
 };
 

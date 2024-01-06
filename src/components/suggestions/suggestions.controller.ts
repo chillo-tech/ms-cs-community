@@ -1,16 +1,12 @@
+import mailingService from '@components/mailing/mailing.service';
 import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
+import { initEnv } from '@utils/initEnvIronementVariables';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
-import suggestionsService from './suggestions.service';
-import mailingService from '@components/mailing/mailing.service';
-import dotenv from 'dotenv';
 import Handlebars from 'handlebars';
+import suggestionsService from './suggestions.service';
 
-if (process.env && process.env.NODE_ENV === 'test') {
-  dotenv.config({ path: '.env.test' });
-} else {
-  dotenv.config({ path: '.env' });
-}
+initEnv();
 
 const templateMailToUser = readFileSync(
   process.env.PATH_TO_MAILS_TEMPLATES + 'suggestions/template-mail-to-user.hbs',
@@ -90,7 +86,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     res.json({ msg: 'success', suggest });
   } catch (e) {
     console.log('e', e);
-    res.json({ msg: 'something went wrong' });
+    res.status(400).json({ msg: 'something went wrong' });
   }
 };
 
