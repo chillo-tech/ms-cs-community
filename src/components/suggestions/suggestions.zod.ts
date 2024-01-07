@@ -11,8 +11,8 @@ class SuggestionsZodSchema {
           .array()
           .min(1, 'you should provide at least one tag')
           .optional(),
-        phoneIndex: number(),
-        phone: number(),
+        phoneIndex: number().optional(),
+        phone: number().optional(),
       }),
       title: string({
         required_error: 'Title is required',
