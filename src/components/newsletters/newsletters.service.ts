@@ -13,7 +13,10 @@ const create = async (user: User) => {
 
 const remove = async (email: string) => {
   try {
-    const deletedUser = await NewslettersUser.findOneAndDelete({ email });
+    const deletedUser = await NewslettersUser.findOneAndUpdate(
+      { email },
+      { isActive: false }
+    );
     return deletedUser?.toJSON();
   } catch (err) {
     console.log('something went wrong went creating a new User', err);

@@ -41,6 +41,7 @@ const registerNewUser = async (req: Request, res: Response) => {
     const user = await newsLettersService.create({
       name,
       email,
+      isActive: true,
     });
 
     // make external API calls
