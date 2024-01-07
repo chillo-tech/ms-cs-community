@@ -75,7 +75,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     });
     // SEND EMAIL
 
-    mailingService.send2({
+    mailingService.sendWithNodemailer({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
       html: parsedMail2,

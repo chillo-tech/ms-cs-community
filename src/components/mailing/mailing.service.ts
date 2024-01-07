@@ -38,7 +38,7 @@ const send = (mailOptions: SmallMailOptions, params?: TokenData) => {
   );
 };
 
-const send2 = ({
+const sendWithNodemailer = ({
   to,
   subject,
   html,
@@ -49,7 +49,7 @@ const send2 = ({
 }) => {
   try {
     transporter.sendMail({
-      from : process.env.OWNER_EMAIL,
+      from: process.env.OWNER_EMAIL,
       to,
       subject,
       html,
@@ -62,7 +62,7 @@ const send2 = ({
 
 const mailingService = {
   send,
-  send2,
+  sendWithNodemailer,
 };
 
 export default mailingService;

@@ -80,7 +80,7 @@ const registerNewUser = async (req: Request, res: Response) => {
     const template1 = Handlebars.compile(templateMailToUserSubscribe);
     const parsedMail1 = template1({ unsubscribeLink });
     // the send the mail
-    mailingService.send2({
+    mailingService.sendWithNodemailer({
       to: email,
       subject:
         'Nous avons bien reçu votre enregistrement aux newsletters, Merci!',
@@ -94,7 +94,7 @@ const registerNewUser = async (req: Request, res: Response) => {
     const parsedMail2 = template2({ name, email });
     // SEND EMAIL
 
-    mailingService.send2({
+    mailingService.sendWithNodemailer({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvel utilisateur pour les newsletters!',
       html: parsedMail2,
@@ -133,7 +133,7 @@ const unsubscribe = async (req: Request, res: Response) => {
     const template1 = Handlebars.compile(templateMailToUserUnsubscribe);
     const parsedMail1 = template1({});
     // the send the mail
-    mailingService.send2({
+    mailingService.sendWithNodemailer({
       to: email as string,
       subject:
         'Nous avons bien reçu votre desabonnement aux newsletters, Merci!',
@@ -147,7 +147,7 @@ const unsubscribe = async (req: Request, res: Response) => {
     const parsedMail2 = template2({ name, email });
     // SEND EMAIL
 
-    mailingService.send2({
+    mailingService.sendWithNodemailer({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
       html: parsedMail2,
