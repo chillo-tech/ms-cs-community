@@ -68,12 +68,12 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const mailOptions = {
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      text: template({}),
+      html: template({}),
     };
 
     // the send the mail
     // console.log('mailingOptions', mailOptions);
-    mailingService.send(mailOptions);
+    mailingService.sendWithNodemailer(mailOptions);
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
