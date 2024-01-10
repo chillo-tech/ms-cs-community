@@ -1,5 +1,6 @@
 import { model } from 'mongoose';
-import { avisSchema } from './avis.schemas';
+import { avisFrontViewSchema, avisSchema } from './avis.schemas';
 
 const Avis = model('Avis', avisSchema);
-export default Avis;
+const AvisFrontView = model('AvisFrontView', avisFrontViewSchema);
+export { Avis, AvisFrontView };

@@ -7,7 +7,7 @@ const avisSchema = new Schema({
   impression: String,
 });
 
-const avisFrontView = new Schema({
+const avisFrontViewSchema = new Schema({
   name: String,
   left: {
     title: String,
@@ -32,4 +32,4 @@ const avisFrontView = new Schema({
   },
 });
 
-export { avisSchema, avisFrontView };
+export { avisSchema, avisFrontViewSchema };
