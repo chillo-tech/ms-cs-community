@@ -11,4 +11,8 @@ router
   .route('/')
   .post(validate(avisZodSchema.createAvisSchema), avisController.giveAvis);
 
+router
+  .route('/views')
+  .get(validate(avisZodSchema.getAvisViewSchema), avisController.getAvisView);
+
 export { router };

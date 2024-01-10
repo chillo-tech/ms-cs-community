@@ -9,4 +9,6 @@ app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
   const res = await dbInit();
   if (res) console.log('succesfully connected to mongodb');
+  // to do only for test and once
+  // populate();
 });

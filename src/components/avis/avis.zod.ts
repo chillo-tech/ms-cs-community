@@ -18,6 +18,11 @@ class AvisZodSchema {
       }),
     }),
   });
+  getAvisViewSchema = object({
+    query: object({
+      name: string(),
+    }),
+  });
 }
 
 const avisZodSchema = new AvisZodSchema();

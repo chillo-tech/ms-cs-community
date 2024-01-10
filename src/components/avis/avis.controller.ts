@@ -36,8 +36,20 @@ const giveAvis = async (req: Request, res: Response) => {
   }
 };
 
+const getAvisView = async (req: Request, res: Response) => {
+  const { name } = req.query;
+  try {
+    const view = await avisService.readAvisFrontendViewByName(name as string);
+    res.json({ msg: 'success', view });
+  } catch (error) {
+    res.status(500).json({ msg: 'quelque chose a mal tourne' });
+  }
+};
+
+
 const avisController = {
   giveAvis,
+  getAvisView,
 };
 
 export { avisController };
