@@ -1,5 +1,5 @@
 import { Avis, AvisFrontView } from './avis.model';
-import { AvisType } from './avis.types';
+import { AvisFrontViewType, AvisType } from './avis.types';
 
 const createAvis = async (submittedAvis: AvisType) => {
   try {
@@ -20,8 +20,18 @@ const readAvisFrontendViewByName = async (name: string) => {
   }
 };
 
+const createAvisFrontendView = async (avisFrontendView: AvisFrontViewType) => {
+  try {
+    const view = await AvisFrontView.create(avisFrontendView);
+    return view.toJSON();
+  } catch (error) {
+    throw new Error("Erreur lors de la creation de la vue d'un avis");
+  }
+};
+
 const avisService = {
   createAvis,
   readAvisFrontendViewByName,
+  createAvisFrontendView,
 };
 export { avisService };
