@@ -9,10 +9,13 @@ class AvisZodSchema {
       }).email(),
       message: string({
         invalid_type_error: 'the message should be a string',
-      }).optional(),
+      }),
       impression: string({
         invalid_type_error: 'the impression should be a string',
-      }).optional(),
+      }),
+      subject: string({
+        invalid_type_error: 'the subject should be a string',
+      }),
     }),
   });
 }
