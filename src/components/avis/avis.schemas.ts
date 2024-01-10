@@ -1,3 +1,4 @@
+import { FIELDS_TYPES } from '@constants/avis';
 import { Schema } from 'mongoose';
 
 const avisSchema = new Schema({
@@ -22,7 +23,7 @@ const avisFrontViewSchema = new Schema({
         name: String,
         fieldType: {
           type: String,
-          enum: ['text', 'email', 'radio', 'checkbox'],
+          enum: FIELDS_TYPES,
         },
         label: String,
         placeholder: String,
