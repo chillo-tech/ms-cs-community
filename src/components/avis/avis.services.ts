@@ -50,7 +50,7 @@ const deleteAvisFrontendViewByName = async (name: string) => {
     const view = await AvisFrontView.findByIdAndDelete({ name });
     return view;
   } catch (error) {
-    throw new Error("Erreur lors de la mise a jour de la vue d'un avis");
+    throw new Error("Erreur lors de la suppression de la vue d'un avis");
   }
 };
 
