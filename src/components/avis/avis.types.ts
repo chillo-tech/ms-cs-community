@@ -29,3 +29,26 @@ export type AvisFrontViewType = {
     }[];
   };
 };
+
+export type AvisFrontViewUpdateType = {
+  name?: string;
+  left?: {
+    title?: string;
+    desc?: string;
+  };
+  right?: {
+    title?: string;
+    desc?: string;
+    bottom?: string;
+    fields?: {
+      name?: string;
+      fieldType?: {
+        type?: string;
+        enum?: (typeof FIELDS_TYPES)[number];
+      };
+      label?: string;
+      placeholder?: string;
+      choices?: string[];
+    }[];
+  };
+};
