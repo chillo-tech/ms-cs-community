@@ -7,4 +7,29 @@ const avisSchema = new Schema({
   impression: String,
 });
 
-export { avisSchema };
+const avisFrontView = new Schema({
+  name: String,
+  left: {
+    title: String,
+    desc: String,
+  },
+  right: {
+    title: String,
+    desc: String,
+    bottom: String,
+    fields: [
+      {
+        name: String,
+        fieldType: {
+          type: String,
+          enum: ['text', 'email', 'radio', 'checkbox'],
+        },
+        label: String,
+        placeholder: String,
+        choices: [String],
+      },
+    ],
+  },
+});
+
+export { avisSchema, avisFrontView };
