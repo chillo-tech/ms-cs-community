@@ -1,7 +1,14 @@
-import { Router } from "express";
+import { Router } from 'express';
+import { avisController } from './avis.controller';
+import validate from '@middlewares/requestValidation';
+import avisZodSchema from './avis.zod';
+import { authToken } from '@middlewares/jwt';
 
-const router = Router()
+const router = Router();
+router.use(authToken);
 
+router
+  .route('/')
+  .post(validate(avisZodSchema.createAvisSchema), avisController.giveAvis);
 
-
-export {router}
+export { router };
