@@ -8,8 +8,18 @@ import fs from 'fs';
 import path from 'path';
 //const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
 //const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
-const confirmationTemplate = fs.readFileSync(
-  path.join(__dirname, '../../views/all/confirmation.hbs'),
+// const confirmationTemplate = fs.readFileSync(
+//   path.join(__dirname, '../../views/all/confirmation.hbs'),
+//   'utf-8'
+// );
+
+const mailToUser = fs.readFileSync(
+  path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),
+  'utf-8'
+);
+
+const mailToAdmin = fs.readFileSync(
+  path.join(__dirname, '../../views/suggestions/template-mail-to-admin.hbs'),
   'utf-8'
 );
 
@@ -53,7 +63,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     // send mail to confirm recption
     // first configure mailingOptions Obj
-    const template = Handlebars.compile(confirmationTemplate);
+    const template = Handlebars.compile(mailToUser);
 
     const mailOptions = {
       to: author.email,
@@ -67,7 +77,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const template2 = Handlebars.compile(confirmationTemplate);
+    const template2 = Handlebars.compile(mailToAdmin);
 
     const parsedMail2 = template2({
       name: suggest.author?.name || '',

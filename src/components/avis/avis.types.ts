@@ -19,13 +19,10 @@ export type AvisFrontViewType = {
     bottom: string;
     fields: {
       name: string;
-      fieldType: {
-        type: string;
-        enum: (typeof FIELDS_TYPES)[number];
-      };
+      fieldType: (typeof FIELDS_TYPES)[number];
       label: string;
-      placeholder: string;
-      choices: string[];
+      placeholder?: string;
+      choices?: string[];
     }[];
   };
 };
@@ -42,10 +39,7 @@ export type AvisFrontViewUpdateType = {
     bottom?: string;
     fields?: {
       name?: string;
-      fieldType?: {
-        type?: string;
-        enum?: (typeof FIELDS_TYPES)[number];
-      };
+      fieldType?: (typeof FIELDS_TYPES)[number];
       label?: string;
       placeholder?: string;
       choices?: string[];

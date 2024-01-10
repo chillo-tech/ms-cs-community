@@ -2,6 +2,7 @@ import 'module-alias/register';
 import { initEnv } from '@utils/initEnvIronementVariables';
 import app, { port } from './appinit';
 import { dbInit } from '@components/db/connect';
+// import { populate } from '@components/avis';
 
 initEnv();
 

@@ -20,7 +20,24 @@ const avisView: AvisFrontViewType = {
       'Nous ne traitons les données recueillies que pour faciliter la prise de contact.',
     desc: `Les évaluations nous permmettent de constament nous améliorer.
         Globalement vous êtes ...`,
-    fields: [],
+    fields: [
+      {
+        fieldType: 'email',
+        label: 'votre email',
+        name: 'email',
+      },
+      {
+        fieldType: 'text',
+        label: 'message',
+        name: 'message',
+      },
+      {
+        fieldType: 'checkbox',
+        label: 'vots impressions',
+        name: 'impressions',
+        choices: ['satisfait', 'pas satisfait'],
+      },
+    ],
     title: 'Merci de nous donner votre avis',
   },
 };
