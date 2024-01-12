@@ -1,9 +1,11 @@
 import app from '../../src/appinit';
 import request from 'supertest';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 describe('newsletters controller', () => {
   const token = process.env.JWT_TOKEN || '';
-  console.log('token', token);
 
   describe('register newsletters', () => {
     it('should return 200 and the user should be registred', async () => {

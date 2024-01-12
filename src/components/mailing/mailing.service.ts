@@ -16,7 +16,6 @@ const sendWithNodemailer = ({
       subject,
       html,
     });
-    console.log('email sent succesfully');
   } catch (err) {
     console.log('failed to send email', err);
   }

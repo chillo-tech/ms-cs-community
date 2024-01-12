@@ -6,9 +6,10 @@ import { router as avisRouter } from '@components/avis';
 import { initEnv } from '@utils/initEnvIronementVariables';
 import cors from 'cors';
 import express from 'express';
- const PREFIX = 'api';
- const VERSION = 'v1';
-initEnv()
+import morgan from 'morgan';
+const PREFIX = 'api';
+const VERSION = 'v1';
+initEnv();
 
 export const port = process.env.PORT || 9000;
 const app = express();
@@ -19,6 +20,7 @@ app
       origin: '*',
     })
   )
+  .use(morgan('tiny'))
   .use(express.json());
 
 app.use(`/${PREFIX}/${VERSION}/suggestions`, suggestionsRouter);

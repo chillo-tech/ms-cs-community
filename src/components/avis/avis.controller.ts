@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { avisService } from './avis.services';
 import { readFileSync } from 'fs';
+import Handlebars from 'handlebars';
 import path from 'path';
 import mailingService from '@components/mailing/mailing.service';
 
@@ -32,6 +33,7 @@ const giveAvis = async (req: Request, res: Response) => {
 
     return res.json({ msg: 'success', avis });
   } catch (err) {
+    console.log('err', err);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
@@ -45,7 +47,6 @@ const getAvisView = async (req: Request, res: Response) => {
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
-
 
 const avisController = {
   giveAvis,

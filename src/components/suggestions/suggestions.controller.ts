@@ -1,17 +1,10 @@
 import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
 import { Request, Response } from 'express';
-//import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
 import fs from 'fs';
 import path from 'path';
-//const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
-//const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
-// const confirmationTemplate = fs.readFileSync(
-//   path.join(__dirname, '../../views/all/confirmation.hbs'),
-//   'utf-8'
-// );
 
 const mailToUser = fs.readFileSync(
   path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),
@@ -52,14 +45,12 @@ const makeSuggestion = async (req: Request, res: Response) => {
       .with(rest())
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
 
-    client
-      .request(createItem('contact', tempObj))
-      .then(res => {
-        console.log('res', res);
-      })
-      .catch(err => {
-        console.log('err', err);
-      });
+    client.request(createItem('contact', tempObj)).catch(err => {
+      console.log(
+        'error occured when trying to add a user to directus CMS',
+        err
+      );
+    });
 
     // send mail to confirm recption
     // first configure mailingOptions Obj
@@ -72,7 +63,6 @@ const makeSuggestion = async (req: Request, res: Response) => {
     };
 
     // the send the mail
-    // console.log('mailingOptions', mailOptions);
     mailingService.sendWithNodemailer(mailOptions);
 
     // SEND EMAIL TO OWNER
@@ -93,7 +83,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     res.json({ msg: 'success', suggest });
   } catch (e) {
-    console.log('e', e);
+    console.log('error occured when trying to make a suggestion', e);
     res.status(400).json({ msg: 'something went wrong' });
   }
 };

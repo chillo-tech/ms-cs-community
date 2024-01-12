@@ -58,11 +58,9 @@ const registerNewUser = async (req: Request, res: Response) => {
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
     try {
       const directusRes = await client.request(createItem('contact', tempObj));
-      console.log('directusRes', directusRes);
       directusKey = `${directusRes.id}`;
-      console.log('directusKey', directusKey);
     } catch (error) {
-      console.log('failed to add a new user');
+      console.log('failed to add a new user', error);
     }
 
     // send mail to confirm recption
@@ -76,7 +74,6 @@ const registerNewUser = async (req: Request, res: Response) => {
         token,
       }
     )}`;
-    console.log('unsubscribeLink', unsubscribeLink);
 
     const template1 = Handlebars.compile(templateMailToUserSubscribe);
     const parsedMail1 = template1({ unsubscribeLink });
@@ -103,7 +100,7 @@ const registerNewUser = async (req: Request, res: Response) => {
 
     res.json({ msg: 'success', user });
   } catch (e) {
-    console.log('e', e);
+    console.log('Error when trying to register a user', e);
     res.status(400).json({ msg: 'something went wrong' });
   }
 };
@@ -112,7 +109,7 @@ const unsubscribe = async (req: Request, res: Response) => {
   const { name, email, directusKey } = req.query;
   try {
     // delete user
-    const user = await newsLettersService.remove(email as string);
+    await newsLettersService.remove(email as string);
 
     // make external API calls
 
@@ -120,14 +117,9 @@ const unsubscribe = async (req: Request, res: Response) => {
       .with(rest())
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
 
-    client
-      .request(deleteItem('contact', directusKey as string))
-      .then(res => {
-        console.log('res', res);
-      })
-      .catch(err => {
-        console.log('err', err);
-      });
+    client.request(deleteItem('contact', directusKey as string)).catch(err => {
+      console.log('error when deleting a contact', err);
+    });
 
     // send mail to confirm recption
     // first configure mailingOptions Obj
@@ -153,7 +145,6 @@ const unsubscribe = async (req: Request, res: Response) => {
       subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
       html: parsedMail2,
     });
-    console.log('user', user);
 
     // res.json({ msg: 'success', user });
     res.redirect(
@@ -161,7 +152,7 @@ const unsubscribe = async (req: Request, res: Response) => {
         '/newsletters-unsubscribe'
     );
   } catch (e) {
-    console.log('e', e);
+    console.log('error when trying ro unscubscribe a user', e);
     res.status(400).json({ msg: 'something went wrong' });
   }
 };
