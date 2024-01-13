@@ -1,5 +1,8 @@
-POST http://localhost:9000/api/v1/suggestions
+POST http://localhost:9000/api/v1/newsletters/register
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBOYW1lIjoiU3VnZ2VzdFN5c3RlbSIsImlhdCI6MTcwNDg4Mjc1MCwiZXhwIjoxNzM2NDQwMzUwfQ.-uyScQm_KSQ8LCCS3cgQRQBk8iKcTuMREcy-Js4_GKI
 content-type: application/json
 
-{"title":"jml","description":"lmùlmù,ù","author":{"tag":["ddev"],"phone":761705745,"phoneIndex":358,"email":"accueil@chillo.tech","name":"ddsdsad"}}
+{
+  "name": "achille",
+  "email": "achille.mbougueng@gmail.com"
+}
