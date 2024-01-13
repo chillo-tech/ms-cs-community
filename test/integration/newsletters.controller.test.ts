@@ -1,5 +1,8 @@
 import app from '../../src/appinit';
 import request from 'supertest';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 describe('newsletters controller', () => {
   const token = process.env.JWT_TOKEN || '';

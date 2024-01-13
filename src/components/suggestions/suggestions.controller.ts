@@ -1,11 +1,15 @@
 import { Request, Response } from 'express';
-//import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
 import fs from 'fs';
 import path from 'path';
-import { add } from '@services/queries';
+//const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
+//const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
+const confirmationTemplate = fs.readFileSync(
+  path.join(__dirname, '../../views/all/confirmation.hbs'),
+  'utf-8'
+);
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
@@ -37,7 +41,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     let mailOptions = {
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      text: template({ name: `${author.name}` }),
+      html: template({ name: `${author.name}` }),
     };
 
     // SEND EMAIL TO AUTHOR
@@ -57,8 +61,8 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     res.json({ msg: 'success', suggest });
   } catch (e) {
-    console.log('e', e);
-    res.json({ msg: 'Une erreur est survenues' });
+    console.log('error occured when trying to make a suggestion', e);
+    res.status(400).json({ msg: 'something went wrong' });
   }
 };
 
