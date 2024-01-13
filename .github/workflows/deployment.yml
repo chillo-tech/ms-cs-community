@@ -1,7 +1,4 @@
 on:
-  push:
-    branches:
-      - feature/*
   workflow_dispatch:
 env:
   NODE_VERSION: '14.x'
@@ -40,7 +37,7 @@ jobs:
           port: ${{ secrets.PROD_APPLICATIONS_PORT }}
           username: ${{ secrets.PROD_APPLICATIONS_USERNAME }}
           key: ${{ secrets.PROD_APPLICATIONS_SSH_PRIVATE_KEY }}
-          source: 'docker-compose.yml'
+          source: 'compose.yaml'
           target: ${{ env.FOLDER }}
 
   dockerize:
@@ -123,6 +120,10 @@ jobs:
             echo BREVO_API_KEY=${{ secrets.BREVO_API_KEY }} >> ${{ env.FOLDER }}/.env
             echo DB_URI=${{ secrets.DB_URI }} >> ${{ env.FOLDER }}/.env
             echo PORT=9000 >> ${{ env.FOLDER }}/.env
+            echo BACKOFFICE_API=${{ secrets.BACKOFFICE_API }} >> ${{ env.FOLDER }}/.env
+            echo BACKOFFICE_API_TOKEN=${{ secrets.BACKOFFICE_API_TOKEN }} >> ${{ env.FOLDER }}/.env
+            echo OWNER_EMAIL=${{ secrets.OWNER_EMAIL }} >> ${{ env.FOLDER }}/.env
+            echo OWNER_NAME=${{ secrets.OWNER_NAME }} >> ${{ env.FOLDER }}/.env
 
             docker rmi ${{env.IMAGE}}.${{env.IMAGE_VERSION}}
             sudo docker compose -f ${{ env.FOLDER }}/docker-compose.yml up -d
