@@ -4,12 +4,7 @@ import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
 import fs from 'fs';
 import path from 'path';
-//const templateMailToUser = readFileSync('@constants/mail/template-mail-to-user.html');
-//const templateMailToAdmin = readFileSync('@constants/mail/template-mail-to-admin.html');
-const confirmationTemplate = fs.readFileSync(
-  path.join(__dirname, '../../views/all/confirmation.hbs'),
-  'utf-8'
-);
+import { add } from '@services/queries';
 
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
@@ -36,7 +31,10 @@ const makeSuggestion = async (req: Request, res: Response) => {
       description: suggest.description,
     };
     await add('/api/backoffice/contact', suggestion);
-    const templateMailToUser = fs.readFileSync(path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),'utf-8');
+    const templateMailToUser = fs.readFileSync(
+      path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),
+      'utf-8'
+    );
     let template = Handlebars.compile(templateMailToUser);
     let mailOptions = {
       to: author.email,
@@ -45,19 +43,25 @@ const makeSuggestion = async (req: Request, res: Response) => {
     };
 
     // SEND EMAIL TO AUTHOR
-    mailingService.send(mailOptions);
+    mailingService.sendWithNodemailer(mailOptions);
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const templateMailToAdmin = fs.readFileSync(path.join(__dirname, '../../views/suggestions/template-mail-to-admin.hbs'),'utf-8'); 
+    const templateMailToAdmin = fs.readFileSync(
+      path.join(
+        __dirname,
+        '../../views/suggestions/template-mail-to-admin.hbs'
+      ),
+      'utf-8'
+    );
     template = Handlebars.compile(templateMailToAdmin);
     mailOptions = {
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
-      text: template({title: suggest.title, name: `${author.name}` }),
+      html: template({ title: suggest.title, name: `${author.name}` }),
     };
 
-    mailingService.send(mailOptions);
+    mailingService.sendWithNodemailer(mailOptions);
 
     res.json({ msg: 'success', suggest });
   } catch (e) {
