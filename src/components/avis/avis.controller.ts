@@ -42,6 +42,7 @@ const getAvisView = async (req: Request, res: Response) => {
   const { name } = req.query;
   try {
     const view = await avisService.readAvisFrontendViewByName(name as string);
+    if (!view) return res.status(404).json({ msg: 'view not found' });
     res.json({ msg: 'success', view });
   } catch (error) {
     res.status(500).json({ msg: 'quelque chose a mal tourne' });

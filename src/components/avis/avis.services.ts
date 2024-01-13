@@ -10,7 +10,7 @@ const createAvis = async (submittedAvis: AvisType) => {
     const avis = await Avis.create(submittedAvis);
     return avis.toJSON();
   } catch (error) {
-    throw new Error("Erreur lors de la creation d'un avis");
+    console.log("Erreur lors de la creation d'un avis");
   }
 };
 
@@ -19,7 +19,7 @@ const readAvisFrontendViewByName = async (name: string) => {
     const view = await AvisFrontView.findOne({ name });
     return view?.toJSON();
   } catch (error) {
-    throw new Error("Erreur lors de la lecture de la vue d'un avis");
+    console.log("Erreur lors de la lecture de la vue d'un avis", error);
   }
 };
 
@@ -28,7 +28,7 @@ const createAvisFrontendView = async (avisFrontendView: AvisFrontViewType) => {
     const view = await AvisFrontView.create(avisFrontendView);
     return view.toJSON();
   } catch (error) {
-    throw new Error("Erreur lors de la creation de la vue d'un avis");
+    console.log("Erreur lors de la creation de la vue d'un avis", error);
   }
 };
 
@@ -40,7 +40,7 @@ const updateAvisFrontendViewByName = async (
     const view = await AvisFrontView.findByIdAndUpdate({ name }, update);
     return view?.toJSON();
   } catch (error) {
-    throw new Error("Erreur lors de la mise a jour de la vue d'un avis");
+    console.log("Erreur lors de la mise a jour de la vue d'un avis", error);
   }
 };
 
@@ -49,7 +49,7 @@ const deleteAvisFrontendViewByName = async (name: string) => {
     const view = await AvisFrontView.findByIdAndDelete({ name });
     return view;
   } catch (error) {
-    throw new Error("Erreur lors de la suppression de la vue d'un avis");
+    console.log("Erreur lors de la suppression de la vue d'un avis", error);
   }
 };
 
