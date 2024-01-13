@@ -31,6 +31,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       description: suggest.description,
     };
     await add('/api/backoffice/contact', suggestion);
+    
     const templateMailToUser = fs.readFileSync(
       path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),
       'utf-8'

@@ -11,7 +11,6 @@ class NewslettersZodSchema {
     query: object({
       name: string(),
       email: string().email(),
-      directusKey: string(),
     }),
   });
 }
