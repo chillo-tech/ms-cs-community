@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 export const dbInit = async () => {
   try {
     if (!process.env.DB_URI) {

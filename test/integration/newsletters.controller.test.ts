@@ -3,7 +3,6 @@ import request from 'supertest';
 
 describe('newsletters controller', () => {
   const token = process.env.JWT_TOKEN || '';
-  console.log('token', token);
 
   describe('register newsletters', () => {
     it('should return 200 and the user should be registred', async () => {

@@ -42,8 +42,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 COPY . .
 # Run the build script.
 RUN npm run build
-RUN npm run copy-html-files
-RUN npm run copy-views-files
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
@@ -59,7 +57,6 @@ USER node
 # Copy package.json so that package manager commands can be used.
 COPY package.json .
 
-
 # Copy the production dependencies from the deps stage and also
 # the built application from the build stage into the image.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
@@ -67,9 +64,7 @@ COPY --from=build /usr/src/app/build ./build
 
 
 # Expose the port that the application listens on.
-EXPOSE 9000
-
-RUN ls -al
+EXPOSE 8000
 
 # Run the application.
-CMD [ "node", "build/src/app.js" ]
+CMD node build/src/app.js

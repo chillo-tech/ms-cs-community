@@ -2,7 +2,7 @@ import { Router } from 'express';
 import validate from '@middlewares/requestValidation';
 import { authToken } from '@middlewares/jwt';
 import newslettersZodSchema from './newsletters.zod';
-import newslettersController from './newsletters.controller';
+import {add, unsubscribe} from './newsletters.controller';
 
 const router = Router();
 
@@ -13,14 +13,14 @@ router
   .route('/register')
   .post(
     validate(newslettersZodSchema.createNewslettersUserSchema),
-    newslettersController.registerNewUser
+    add
   );
 
 router
   .route('/unsubscribe')
   .get(
     validate(newslettersZodSchema.deleteNewslettersUserSchema),
-    newslettersController.unsubscribe
+    unsubscribe
   );
 
 export default router;

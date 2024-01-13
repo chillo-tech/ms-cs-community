@@ -17,7 +17,7 @@ const send = (mailOptions: SmallMailOptions, params?: TokenData) => {
   sendSmtpEmail.subject = mailOptions.subject;
   sendSmtpEmail.htmlContent = mailOptions.text;
   sendSmtpEmail.sender = {
-    name: process.env.OWNER_NAME || 'Achille',
+    name: process.env.OWNER_NAME || 'Achille de chillo.tech',
     email: process.env.OWNER_EMAIL || '',
   };
   sendSmtpEmail.to = [{ email: mailOptions.to }];

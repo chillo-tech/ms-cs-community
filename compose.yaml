@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  ms-cs-community:
+    container_name: ms-cs-community
+    # The official v2 Traefik docker image
+    image: ms-cs-community:latest
+    restart: always
+    ports:
+      # The HTTP port
+      - '9000:9000'
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT}
+      DB_URI: ${DB_URI}
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      BACKOFFICE_API: ${BACKOFFICE_API}
+      BACKOFFICE_API_TOKEN: ${BACKOFFICE_API_TOKEN}
+      OWNER_EMAIL: ${OWNER_EMAIL}
+      OWNER_NAME: ${OWNER_NAME}
+    networks:
+      - applications-network
+networks:
+  applications-network:
+    external: true
+    name: applications-network

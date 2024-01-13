@@ -1,0 +1,13 @@
+POST http://localhost:9000/api/v1/suggestions
+Authorization: Bearer 
+content-type: application/json
+
+{
+    "title": "Keykoak debutants",
+    "author": {
+      "name": "achille",
+      "email": "achille.mbougueng@gmail.com",
+      "phoneIndex": 33,
+      "phone": 761705745
+    }
+}
