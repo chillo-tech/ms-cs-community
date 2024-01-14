@@ -6,7 +6,6 @@ const create = async (user: User) => {
     const newUser = await NewslettersUser.create(user);
     return newUser.toJSON();
   } catch (err) {
-    console.log('something went wrong went creating a new User', err);
     throw new Error('something went wrong went creating a new User');
   }
 };
@@ -16,7 +15,6 @@ const remove = async (email: string) => {
     const deletedUser = await NewslettersUser.findOneAndDelete({ email });
     return deletedUser?.toJSON();
   } catch (err) {
-    console.log('something went wrong went creating a new User', err);
     throw new Error('something went wrong went creating a new User');
   }
 };

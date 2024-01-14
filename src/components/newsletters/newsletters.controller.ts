@@ -2,7 +2,6 @@
 import mailingService from '@components/mailing/mailing.service';
 import {
   createDirectus,
-  createItem,
   deleteItem,
   rest,
   staticToken,
@@ -13,7 +12,7 @@ import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
-import jwtService from '@components/jwt/jwt.service';
+import path from "path";
 
 // dotenv.config();
 if (process.env && process.env.NODE_ENV === 'test') {
@@ -22,94 +21,55 @@ if (process.env && process.env.NODE_ENV === 'test') {
   dotenv.config({ path: '.env' });
 }
 
-const templateMailToUserSubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/subscribe/template-mail-to-user.hbs',
-  'utf-8'
-);
-const templateMailToAdminSubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/subscribe/template-mail-to-admin.hbs',
-  'utf-8'
-);
 const templateMailToUserUnsubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/unsubscribe/template-mail-to-user.hbs',
+  path.join(__dirname, "../../views/newsletters/template-mail-to-user.hbs"),
   'utf-8'
 );
 const templateMailToAdminUnsubscribe = readFileSync(
-  process.env.PATH_TO_MAILS_TEMPLATES +
-    'newsletters/unsubscribe/template-mail-to-admin.hbs',
+    path.join(__dirname, "../../views/newsletters/template-mail-to-admin.hbs"),
   'utf-8'
 );
 
-const registerNewUser = async (req: Request, res: Response) => {
+const add = async (req: Request, res: Response) => {
   const { name, email } = req.body;
   try {
-    // store user
+    // save user
     const user = await newsLettersService.create({
       name,
       email,
     });
 
-    // make external API calls
-
-    const tempObj = {
-      name: user.name,
-      email: user.email,
-      tags: 'newsletter',
-    };
-    let directusKey = '';
-
-    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-      .with(rest())
-      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-    try {
-      const directusRes = await client.request(createItem('contact', tempObj));
-      console.log('directusRes', directusRes);
-      directusKey = `${directusRes.id}`;
-      console.log('directusKey', directusKey);
-    } catch (error) {
-      console.log('failed to add a new user');
-    }
-
-    // send mail to confirm recption
-
-    const token =
-      'Bearer ' +
-      jwtService.createToken('24h');
     const unsubscribeLink = `http://localhost:9000/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
-        name: name as string,
-        email,
-        directusKey,
-        token,
+        name: (name as string).replaceAll(' ', '%20'),
+        email
       }
     )}`;
-    console.log('unsubscribeLink', unsubscribeLink);
 
-    const template1 = Handlebars.compile(templateMailToUserSubscribe);
-    const parsedMail1 = template1({ unsubscribeLink });
-    // the send the mail
-    mailingService.send2({
+
+    const templateMailToUser = readFileSync(path.join(__dirname, "../../views/newsletters/template-mail-to-user.hbs"),'utf-8');
+    let template = Handlebars.compile(templateMailToUser);
+    let mailOptions = {
       to: email,
-      subject:
-        'Nous avons bien reçu votre enregistrement aux newsletters, Merci!',
-      html: parsedMail1,
-    });
+      subject: 'Nous avons bien reçu votre inscription à notre newsletter. Merci!',
+      text: template({ name: `${name}` , unsubscribeLink}),
+    };
+
+    // SEND EMAIL TO AUTHOR
+    mailingService.send(mailOptions);
+
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
-    const template2 = Handlebars.compile(templateMailToAdminSubscribe);
-
-    const parsedMail2 = template2({ name, email });
-    // SEND EMAIL
-
-    mailingService.send2({
+    const templateMailToAdmin = readFileSync(path.join(__dirname, '../../views/newsletters/template-mail-to-admin.hbs'),'utf-8'); 
+    template = Handlebars.compile(templateMailToAdmin);
+    mailOptions = {
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
-      subject: 'Nouvel utilisateur pour les newsletters!',
-      html: parsedMail2,
-    });
+      subject: 'Nouvel utilisateur pour la newsletter!',
+      text: template({ name, email }),
+    };
+
+    mailingService.send(mailOptions);
 
     res.json({ msg: 'success', user });
   } catch (e) {
@@ -179,9 +139,8 @@ const unsubscribe = async (
   }
 };
 
-const newslettersController = {
-  registerNewUser,
+
+export  {
+  add,
   unsubscribe,
 };
-
-export default newslettersController;
