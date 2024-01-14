@@ -15,7 +15,7 @@ import newsLettersService from './newsletters.service';
 import path from 'path';
 import { initEnv } from '@utils/initEnvIronementVariables';
 
-initEnv();
+initEnv()
 
 const templateMailToUserSubscribe = readFileSync(
   path.join(__dirname, '../../views/newsletters/template-mail-to-user.hbs'),
@@ -34,10 +34,10 @@ const templateMailToAdminUnsubscribe = readFileSync(
   'utf-8'
 );
 
-const registerNewUser = async (req: Request, res: Response) => {
+const add = async (req: Request, res: Response) => {
   const { name, email } = req.body;
   try {
-    // store user
+    // save user
     const user = await newsLettersService.create({
       name,
       email,
@@ -51,14 +51,12 @@ const registerNewUser = async (req: Request, res: Response) => {
       email: user.email,
       tags: 'newsletter',
     };
-    let directusKey = '';
 
     const client = createDirectus(process.env.DIRECTUS_API_URI || '')
       .with(rest())
       .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
     try {
-      const directusRes = await client.request(createItem('contact', tempObj));
-      directusKey = `${directusRes.id}`;
+      await client.request(createItem('contact', tempObj));
     } catch (error) {
       console.log('failed to add a new user', error);
     }
@@ -70,32 +68,28 @@ const registerNewUser = async (req: Request, res: Response) => {
       {
         name: name as string,
         email,
-        directusKey,
         token,
       }
     )}`;
 
     const template1 = Handlebars.compile(templateMailToUserSubscribe);
-    const parsedMail1 = template1({ unsubscribeLink });
     // the send the mail
     mailingService.sendWithNodemailer({
       to: email,
       subject:
-        'Nous avons bien reçu votre enregistrement aux newsletters, Merci!',
-      html: parsedMail1,
+        'Nous avons bien reçu votre inscription à notre newsletter. Merci!',
+      html: template1({ name: `${name}`, unsubscribeLink }),
     });
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
     const template2 = Handlebars.compile(templateMailToAdminSubscribe);
-
-    const parsedMail2 = template2({ name, email });
     // SEND EMAIL
 
     mailingService.sendWithNodemailer({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
-      subject: 'Nouvel utilisateur pour les newsletters!',
-      html: parsedMail2,
+      subject: 'Nouvel utilisateur pour la newsletter!',
+      html: template2({ name, email }),
     });
 
     res.json({ msg: 'success', user });
@@ -157,9 +151,4 @@ const unsubscribe = async (req: Request, res: Response) => {
   }
 };
 
-const newslettersController = {
-  registerNewUser,
-  unsubscribe,
-};
-
-export default newslettersController;
+export { add, unsubscribe };

@@ -10,5 +10,10 @@ app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
   const res = await dbInit();
   if (res) console.log('succesfully connected to mongodb');
+
+
+  console.log(`----------------------`);
+  console.log(JSON.stringify(process.env, null, 2));
+  console.log(`----------------------`);
   populate();
 });

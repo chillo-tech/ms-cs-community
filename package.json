@@ -5,7 +5,7 @@
   "main": "./build/src/app.js",
   "scripts": {
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
-    "build": "rimraf build && npx tsc",
+    "build": "rimraf build && npx tsc && npm run copy-html-files && npm run copy-views-files",
     "copy-html-files": "copyfiles -u 3 src/constants/mail/*.html build/src/constants/mail/",
     "copy-views-files": "copyfiles -u 2 src/views/**/*.hbs build/src/views/",
     "prestart": "npm run lint && npm run build && npm run copy-html-files && npm run copy-views-files",
@@ -51,7 +51,7 @@
   "dependencies": {
     "@directus/sdk": "^14.0.0",
     "@getbrevo/brevo": "^2.0.0-beta.4",
-    "axios": "^1.6.3",
+    "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "config": "^3.3.9",
     "cors": "^2.8.5",

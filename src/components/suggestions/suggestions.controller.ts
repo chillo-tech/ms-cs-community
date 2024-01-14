@@ -1,9 +1,9 @@
-import { createDirectus, createItem, rest, staticToken } from '@directus/sdk';
 import { Request, Response } from 'express';
 import Handlebars from 'handlebars';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
 import fs from 'fs';
+import { add } from '@services/queries';
 import path from 'path';
 
 const mailToUser = fs.readFileSync(
@@ -31,35 +31,22 @@ const makeSuggestion = async (req: Request, res: Response) => {
     if (suggest.author?.tag) {
       tempTag.push(...suggest.author.tag);
     }
-    const tempObj = {
-      name: suggest.author?.name,
+    const suggestion = {
+      lastName: suggest.author?.name,
       email: suggest.author?.email,
       tags: tempTag.join(', '),
-      phoneindex: suggest.author?.phoneIndex?.toString(),
+      phoneIndex: suggest.author?.phoneIndex?.toString(),
       phone: suggest.author?.phone?.toString(),
       title: suggest.title,
       description: suggest.description,
     };
-
-    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-      .with(rest())
-      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-
-    client.request(createItem('contact', tempObj)).catch(err => {
-      console.log(
-        'error occured when trying to add a user to directus CMS',
-        err
-      );
-    });
-
-    // send mail to confirm recption
-    // first configure mailingOptions Obj
-    const template = Handlebars.compile(mailToUser);
-
-    const mailOptions = {
+    await add('/api/backoffice/contact', suggestion);
+    const templateMailToUser = fs.readFileSync(path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),'utf-8');
+    let template = Handlebars.compile(templateMailToUser);
+    let mailOptions = {
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
-      html: template({}),
+      html: template({ name: `${author.name}` }),
     };
 
     // the send the mail
@@ -84,7 +71,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     res.json({ msg: 'success', suggest });
   } catch (e) {
     console.log('error occured when trying to make a suggestion', e);
-    res.status(400).json({ msg: 'something went wrong' });
+    res.status(400).json({ msg: 'Une erreur est survenues' });
   }
 };
 
