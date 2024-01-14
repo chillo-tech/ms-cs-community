@@ -15,6 +15,6 @@ app.listen(port, async () => {
 
 
   console.log(`----------------------`);
-  console.log(`${process.env}`);
+  console.log(JSON.stringify(process.env, null, 2));
   console.log(`----------------------`);
 });

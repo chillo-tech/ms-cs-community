@@ -21,6 +21,7 @@ jobs:
           username: ${{ secrets.PROD_APPLICATIONS_USERNAME }}
           key: ${{ secrets.PROD_APPLICATIONS_SSH_PRIVATE_KEY }}
           script: |
+            sudo rm -rf ${{ env.FOLDER }}
             sudo mkdir -p  ${{ env.FOLDER }}
             sudo chmod ugo+rwx  ${{ env.FOLDER }}
 
@@ -115,7 +116,6 @@ jobs:
           script: |
             docker compose -f ${{ env.FOLDER }}/docker-compose.yml stop
             docker compose -f ${{ env.FOLDER }}/docker-compose.yml rm -f
-            rm -f ${{ env.FOLDER }}/.env
 
             echo BREVO_API_KEY=${{ secrets.BREVO_API_KEY }} >> ${{ env.FOLDER }}/.env
             echo DB_URI=${{ secrets.DB_URI }} >> ${{ env.FOLDER }}/.env
@@ -126,5 +126,6 @@ jobs:
             echo OWNER_NAME=${{ secrets.OWNER_NAME }} >> ${{ env.FOLDER }}/.env
 
             docker rmi ${{env.IMAGE}}.${{env.IMAGE_VERSION}}
-            sudo docker compose -f ${{ env.FOLDER }}/docker-compose.yml up -d
+            sudo docker compose -f ${{ env.FOLDER }}/compose.yaml up -d
+
             rm -f ${{ env.FOLDER }}/.env
