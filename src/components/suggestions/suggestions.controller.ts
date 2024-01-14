@@ -41,16 +41,13 @@ const makeSuggestion = async (req: Request, res: Response) => {
       description: suggest.description,
     };
     await add('/api/backoffice/contact', suggestion);
-    const templateMailToUser = fs.readFileSync(path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),'utf-8');
-    let template = Handlebars.compile(templateMailToUser);
-    let mailOptions = {
+    const template = Handlebars.compile(mailToUser);
+    // the send the mail
+    mailingService.sendWithNodemailer({
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
       html: template({ name: `${author.name}` }),
-    };
-
-    // the send the mail
-    mailingService.sendWithNodemailer(mailOptions);
+    });
 
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
