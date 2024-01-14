@@ -11,7 +11,9 @@ const onRequest = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig
   authorization = { 'Authorization':`Bearer ${process.env.BACKOFFICE_API_TOKEN}`};
 
   const baseURL = process.env.BACKOFFICE_API;
-
+  console.log('-----------------------')
+  console.log({baseURL, urlToCall})
+  console.log('-----------------------')
   return {
       ...config,
       baseURL,
