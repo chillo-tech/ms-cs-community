@@ -1,12 +1,5 @@
 import jwtService from '@components/jwt/jwt.service';
 import mailingService from '@components/mailing/mailing.service';
-import {
-  createDirectus,
-  createItem,
-  deleteItem,
-  rest,
-  staticToken,
-} from '@directus/sdk';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
@@ -14,8 +7,9 @@ import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
 import path from 'path';
 import { initEnv } from '@utils/initEnvIronementVariables';
+import { add as BackOfficeAdd } from '@services/queries';
 
-initEnv()
+initEnv();
 
 const templateMailToUserSubscribe = readFileSync(
   path.join(__dirname, '../../views/newsletters/template-mail-to-user.hbs'),
@@ -52,17 +46,9 @@ const add = async (req: Request, res: Response) => {
       tags: 'newsletter',
     };
 
-    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-      .with(rest())
-      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-    try {
-      await client.request(createItem('contact', tempObj));
-    } catch (error) {
-      console.log('failed to add a new user', error);
-    }
+    await BackOfficeAdd('/api/backoffice/contact', tempObj);
 
     // send mail to confirm recption
-
     const token = 'Bearer ' + jwtService.createToken('24h');
     const unsubscribeLink = `http://localhost:9000/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
@@ -100,50 +86,31 @@ const add = async (req: Request, res: Response) => {
 };
 
 const unsubscribe = async (req: Request, res: Response) => {
-  const { name, email, directusKey } = req.query;
+  const { name, email } = req.query;
   try {
     // delete user
     await newsLettersService.remove(email as string);
 
-    // make external API calls
-
-    const client = createDirectus(process.env.DIRECTUS_API_URI || '')
-      .with(rest())
-      .with(staticToken(process.env.DIRECTUS_API_KEY || ''));
-
-    client.request(deleteItem('contact', directusKey as string)).catch(err => {
-      console.log('error when deleting a contact', err);
-    });
-
     // send mail to confirm recption
-    // first configure mailingOptions Obj
     const template1 = Handlebars.compile(templateMailToUserUnsubscribe);
-    const parsedMail1 = template1({});
-    // the send the mail
     mailingService.sendWithNodemailer({
       to: email as string,
       subject:
         'Nous avons bien reçu votre desabonnement aux newsletters, Merci!',
-      html: parsedMail1,
+      html: template1({}),
     });
 
     // SEND EMAIL TO OWNER
-    // CONFIGURE EMAIL
     const template2 = Handlebars.compile(templateMailToAdminUnsubscribe);
-
-    const parsedMail2 = template2({ name, email });
-    // SEND EMAIL
-
     mailingService.sendWithNodemailer({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
-      html: parsedMail2,
+      html: template2({ name, email }),
     });
 
-    // res.json({ msg: 'success', user });
     res.redirect(
       (process.env.FRONTEND_URI || 'https://chillo.tech/') +
-        '/newsletters-unsubscribe'
+        '/newsletters/unsubscribe'
     );
   } catch (e) {
     console.log('error when trying ro unscubscribe a user', e);
