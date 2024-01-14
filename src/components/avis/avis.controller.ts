@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
 import mailingService from '@components/mailing/mailing.service';
+import { add } from '@services/queries';
 
 const confirmationTemplate = readFileSync(
   path.join(__dirname, '../../views/avis/template-mail-to-user.hbs'),
@@ -22,6 +23,12 @@ const giveAvis = async (req: Request, res: Response) => {
     });
 
     // store avis to cms
+    await add('/api/backoffice/contact', {
+      message,
+      email,
+      impression,
+      subject,
+    });
 
     // send mail to user
     const template = Handlebars.compile(confirmationTemplate);
