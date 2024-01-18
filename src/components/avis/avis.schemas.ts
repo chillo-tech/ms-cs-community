@@ -1,4 +1,3 @@
-import { FIELDS_TYPES } from '@constants/avis';
 import { Schema } from 'mongoose';
 
 const avisSchema = new Schema({
@@ -10,27 +9,9 @@ const avisSchema = new Schema({
 
 const avisFrontViewSchema = new Schema({
   name: String,
-  left: {
-    title: String,
-    desc: String,
-  },
-  right: {
-    title: String,
-    desc: String,
-    bottom: String,
-    fields: [
-      {
-        name: String,
-        fieldType: {
-          type: String,
-          enum: FIELDS_TYPES,
-        },
-        label: String,
-        placeholder: String,
-        choices: [String],
-      },
-    ],
-  },
+  title: String,
+  description: String,
 });
 
-export { avisSchema, avisFrontViewSchema };
+export { avisFrontViewSchema, avisSchema };
+

@@ -40,7 +40,9 @@ const makeSuggestion = async (req: Request, res: Response) => {
       title: suggest.title,
       description: suggest.description,
     };
-    await add('/api/backoffice/contact', suggestion);
+
+    // requette pour ajout de suggestion
+    await add('/api/backoffice/suggestion', suggestion);
     const template = Handlebars.compile(mailToUser);
     // the send the mail
     mailingService.sendWithNodemailer({

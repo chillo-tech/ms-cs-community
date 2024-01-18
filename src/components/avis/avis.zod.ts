@@ -10,8 +10,8 @@ class AvisZodSchema {
       message: string({
         invalid_type_error: 'the message should be a string',
       }),
-      impression: string({
-        invalid_type_error: 'the impression should be a string',
+      note: string({
+        invalid_type_error: 'the note should be a string',
       }),
       subject: string({
         invalid_type_error: 'the subject should be a string',
@@ -20,7 +20,7 @@ class AvisZodSchema {
   });
   getAvisViewSchema = object({
     query: object({
-      name: string(),
+      slug: string(),
     }),
   });
 }

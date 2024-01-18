@@ -14,7 +14,7 @@ const createAvis = async (submittedAvis: AvisType) => {
   }
 };
 
-const readAvisFrontendViewByName = async (name: string) => {
+const readAvisFrontendViewBySlug = async (name: string) => {
   try {
     const view = await AvisFrontView.findOne({ name });
     return view?.toJSON();
@@ -55,7 +55,7 @@ const deleteAvisFrontendViewByName = async (name: string) => {
 
 const avisService = {
   createAvis,
-  readAvisFrontendViewByName,
+  readAvisFrontendViewBySlug,
   createAvisFrontendView,
   updateAvisFrontendViewByName,
   deleteAvisFrontendViewByName,

@@ -12,21 +12,21 @@ const confirmationTemplate = readFileSync(
 );
 
 const giveAvis = async (req: Request, res: Response) => {
-  const { message, email, impression, subject } = req.body;
+  const { message, email, note, subject } = req.body;
   try {
     // store avis to db
     const avis = await avisService.createAvis({
       subject,
       message,
       email,
-      impression,
+      note,
     });
 
     // store avis to cms
     await add('/api/backoffice/contact', {
       message,
       email,
-      impression,
+      note,
       subject,
     });
 
@@ -46,9 +46,9 @@ const giveAvis = async (req: Request, res: Response) => {
 };
 
 const getAvisView = async (req: Request, res: Response) => {
-  const { name } = req.query;
+  const { slug } = req.query;
   try {
-    const view = await avisService.readAvisFrontendViewByName(name as string);
+    const view = await avisService.readAvisFrontendViewBySlug(slug as string);
     if (!view) return res.status(404).json({ msg: 'view not found' });
     res.json({ msg: 'success', view });
   } catch (error) {
