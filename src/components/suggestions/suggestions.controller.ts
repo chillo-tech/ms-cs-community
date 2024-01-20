@@ -37,7 +37,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       tags: tempTag.join(', '),
       phoneIndex: suggest.author?.phoneIndex?.toString(),
       phone: suggest.author?.phone?.toString(),
-      title: suggest.title,
+      titre: suggest.title,
       description: suggest.description,
     };
 
