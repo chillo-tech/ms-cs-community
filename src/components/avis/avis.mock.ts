@@ -17,7 +17,6 @@ const avisView: AvisFrontViewType = {
 
 const populate = async () => {
   const avisViewBd = await avisService.readAvisFrontendViewBySlug('docker');
-  console.log('avisViewBd', avisViewBd);
   if (!avisViewBd) await avisService.createAvisFrontendView(avisView);
   console.log('succes creating a mock view for the name "docker"');
 };
