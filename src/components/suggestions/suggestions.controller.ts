@@ -31,20 +31,41 @@ const makeSuggestion = async (req: Request, res: Response) => {
     if (suggest.author?.tag) {
       tempTag.push(...suggest.author.tag);
     }
-    const suggestion = {
-      lastName: suggest.author?.name,
-      email: suggest.author?.email,
-      tags: tempTag.join(', '),
+
+    const contact = {
       phoneIndex: suggest.author?.phoneIndex?.toString(),
       phone: suggest.author?.phone?.toString(),
+      firstName: suggest.author?.name,
+      email: suggest.author?.email,
+      tags: tempTag.join(', '),
+    };
+    const contactToSecondBackoffice = {
+      phoneindex: suggest.author?.phoneIndex?.toString(),
+      phone: suggest.author?.phone?.toString(),
+      name: suggest.author?.name,
+      email: suggest.author?.email,
+      tags: tempTag.join(', '),
+    };
+
+    // requete pour ajout de contact dans le cms contacts...
+    add('/api/contacts/contact', contactToSecondBackoffice);
+
+    const suggestion = {
       titre: suggest.title,
       description: suggest.description,
+      suggestion_contact: [
+        {
+          contact_id: contact,
+        },
+      ],
     };
 
     // requette pour ajout de suggestion
-    await add('/api/backoffice/suggestion', suggestion);
-    const template = Handlebars.compile(mailToUser);
+    add('/api/backoffice/suggestion', suggestion);
+
     // the send the mail
+    // configure the mail
+    const template = Handlebars.compile(mailToUser);
     mailingService.sendWithNodemailer({
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
@@ -54,13 +75,11 @@ const makeSuggestion = async (req: Request, res: Response) => {
     // SEND EMAIL TO OWNER
     // CONFIGURE EMAIL
     const template2 = Handlebars.compile(mailToAdmin);
-
     const parsedMail2 = template2({
       name: suggest.author?.name || '',
       title: suggest.title,
     });
     // SEND EMAIL
-
     mailingService.sendWithNodemailer({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
