@@ -41,12 +41,15 @@ const add = async (req: Request, res: Response) => {
     // make external API calls
 
     const tempObj = {
+      firstName : user.name,
       name: user.name,
       email: user.email,
       tags: 'newsletter',
+      
     };
 
     await BackOfficeAdd('/api/backoffice/contact', tempObj);
+    await BackOfficeAdd('/api/contacts/contact', tempObj);
 
     // send mail to confirm recption
     const token = 'Bearer ' + jwtService.createToken('24h');

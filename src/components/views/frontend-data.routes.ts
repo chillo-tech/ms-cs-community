@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { getAvisAndSuggestions } from './frontend-data.controllers';
+import { frontendDataController } from './frontend-data.controllers';
 
 const frontendDataRouter = Router();
 
-frontendDataRouter.get('/avis-suggestions', getAvisAndSuggestions);
+frontendDataRouter.get('/avis', frontendDataController.getAvis);
+frontendDataRouter.get('/suggestions', frontendDataController.getSuggestions);
 
 export { frontendDataRouter };
