@@ -13,6 +13,7 @@ const confirmationTemplate = readFileSync(
 
 const giveAvis = async (req: Request, res: Response) => {
   const { message, nom, email, note, slug, session_id } = req.body;
+  console.log('sessionId', session_id);
   let slugId = 0;
   try {
     if (typeof slug !== 'string' || slug === '') {
