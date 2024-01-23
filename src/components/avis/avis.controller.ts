@@ -66,7 +66,7 @@ const giveAvis = async (req: Request, res: Response) => {
 
 const getAvisFormation = async (req: Request, res: Response) => {
   const { slug } = req.query;
-  let slugId = 0;
+  // let slugId = 0;
   try {
     if (typeof slug !== 'string' || slug === '') {
       throw new Error('invalid slug');
@@ -76,13 +76,13 @@ const getAvisFormation = async (req: Request, res: Response) => {
     if (!id || isNaN(id)) {
       throw new Error('invalid slug');
     }
-    slugId = id;
+    // slugId = id;
   } catch {
     return res.status(400).json({ msg: 'invalid slug' });
   }
   try {
     const formation = await search(
-      `/api/backoffice/Formation/${slugId}?fields=*,sessions.*&filter[slug][_eq]=${slug}`
+      `/api/backoffice/Formation?fields=*,sessions.*&filter[slug][_eq]=${slug}`
     );
     if (!formation) return res.status(404).json({ msg: 'view not found' });
     // const sessionId = formation.data.sessions[0]?.Session_id;
