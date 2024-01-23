@@ -2,12 +2,12 @@
 import { search } from '@services/queries';
 import { Request, Response } from 'express';
 
-const AVIS_LENGTH = 6;
+const AVIS_LENGTH = 2;
 
 const getAvis = async (req: Request, res: Response) => {
   try {
     const avis = await search(
-      `/api/backoffice/avis?fields=*,avis_id.*&limit=20&filter[status][_eq]=published&filter[note][_gte]=4`
+      `/api/backoffice/avis?fields=*,avis_id.*&limit=10&filter[status][_eq]=published&filter[note][_gte]=4`
     );
 
     // filtrer les avis

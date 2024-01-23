@@ -5,4 +5,3 @@ export * from './avis.zod';
 export * from './avis.types';
 export * from './avis.schemas';
 export * from './avis.services';
-export * from './avis.mock';

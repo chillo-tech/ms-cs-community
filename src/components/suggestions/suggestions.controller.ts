@@ -38,7 +38,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       firstName: suggest.author?.name,
       email: suggest.author?.email,
       tags: tempTag.join(', '),
-      position: suggest.author?.tag,
+      position: suggest.author?.tag.join(', '),
     };
     const contactToSecondBackoffice = {
       phoneindex: suggest.author?.phoneIndex?.toString(),
@@ -46,7 +46,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       name: suggest.author?.name,
       email: suggest.author?.email,
       tags: tempTag.join(', '),
-      position: suggest.author?.tag,
+      position: suggest.author?.tag.join(', '),
     };
 
     // requete pour ajout de contact dans le cms contacts...

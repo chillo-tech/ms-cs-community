@@ -1,4 +1,4 @@
-import { object, string } from 'zod';
+import { number, object, string } from 'zod';
 
 class AvisZodSchema {
   createAvisSchema = object({
@@ -10,11 +10,17 @@ class AvisZodSchema {
       message: string({
         invalid_type_error: 'the message should be a string',
       }),
-      note: string({
-        invalid_type_error: 'the note should be a string',
+      nom: string({
+        invalid_type_error: 'the nom should be a string',
       }),
-      subject: string({
-        invalid_type_error: 'the subject should be a string',
+      note: number({
+        invalid_type_error: 'the note should be a number',
+      }),
+      session_id: number({
+        invalid_type_error: 'the session_id should be a number',
+      }),
+      slug: string({
+        invalid_type_error: 'the slug should be a string',
       }),
     }),
   });

@@ -7,7 +7,7 @@ import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
 import path from 'path';
 import { initEnv } from '@utils/initEnvIronementVariables';
-import { add as BackOfficeAdd } from '@services/queries';
+import { add as BackOfficeAdd, patch } from '@services/queries';
 
 initEnv();
 
@@ -41,23 +41,34 @@ const add = async (req: Request, res: Response) => {
     // make external API calls
 
     const tempObj = {
-      firstName : user.name,
+      firstName: user.name,
       name: user.name,
       email: user.email,
       tags: 'newsletter',
-      
+      newsletter: true,
     };
 
-    await BackOfficeAdd('/api/backoffice/contact', tempObj);
-    await BackOfficeAdd('/api/contacts/contact', tempObj);
+    const backofficeResponse = await BackOfficeAdd(
+      '/api/backoffice/contact',
+      tempObj
+    );
+    const contactOfficeResponse = await BackOfficeAdd(
+      '/api/contacts/contact',
+      tempObj
+    );
+
+    const backoffice_contact_id = backofficeResponse.data.data?.id;
+    const contactoffice_contact_id = contactOfficeResponse.data.data?.id;
 
     // send mail to confirm recption
     const token = 'Bearer ' + jwtService.createToken('24h');
-    const unsubscribeLink = `http://localhost:9000/api/v1/newsletters/unsubscribe?${querystring.encode(
+    const unsubscribeLink = `${process.env.API_URI}/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
         name: name as string,
         email,
         token,
+        backoffice_contact_id,
+        contactoffice_contact_id,
       }
     )}`;
 
@@ -89,11 +100,18 @@ const add = async (req: Request, res: Response) => {
 };
 
 const unsubscribe = async (req: Request, res: Response) => {
-  const { name, email } = req.query;
+  const { name, email, backoffice_contact_id, contactoffice_contact_id } =
+    req.query;
   try {
     // delete user
-    await newsLettersService.remove(email as string);
+    newsLettersService.remove(email as string);
+    patch(`/api/backoffice/contact/${backoffice_contact_id}`, {
+      newsletter: false,
+    });
 
+    patch(`/api/contacts/contact/${contactoffice_contact_id}`, {
+      newsletter: false,
+    });
     // send mail to confirm recption
     const template1 = Handlebars.compile(templateMailToUserUnsubscribe);
     mailingService.sendWithNodemailer({

@@ -1,5 +1,5 @@
 import { POSITIONS } from '@constants/suggestions';
-import { ZodEnum, number, object, string } from 'zod';
+import { ZodEnum, object, string } from 'zod';
 
 class SuggestionsZodSchema {
   createSuggestionsSchema = object({
@@ -11,8 +11,6 @@ class SuggestionsZodSchema {
           .array()
           .min(1, 'you should provide at least one tag')
           .optional(),
-        phoneIndex: number().optional(),
-        phone: number().optional(),
       }),
       title: string({
         required_error: 'Title is required',
