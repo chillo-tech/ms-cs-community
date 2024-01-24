@@ -10,11 +10,9 @@
     "copy-views-files": "copyfiles -u 2 src/views/**/*.hbs build/src/views/",
     "prestart": "npm run lint && npm run build && npm run copy-html-files && npm run copy-views-files",
     "start": "node build/src/app.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "clean": "rimraf build/",
     "test": "cross-env NODE_ENV=test jest --testTimeout=50000 --detectOpenHandles",
-    "watch": "nodemon --exec \"npm run build && npm run start\" --watch src --ext ts",
-    "watch-dirty": "nodemon --exec \"tsc -p tsconfig.json && npm run start\" --watch src --ext ts"
+    "dev": "nodemon --exec \"npm run build && npm run start\" --watch src --ext ts"
   },
   "keywords": [],
   "author": "",
@@ -52,7 +50,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@directus/sdk": "^14.0.0",
     "@getbrevo/brevo": "^2.0.0-beta.4",
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",

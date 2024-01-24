@@ -8,7 +8,6 @@ const router = Router();
 
 router.use(authToken);
 
-// create new suggestion
 router
   .route('/')
   .post(

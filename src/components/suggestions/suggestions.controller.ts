@@ -19,14 +19,12 @@ const mailToAdmin = fs.readFileSync(
 const makeSuggestion = async (req: Request, res: Response) => {
   const { author, description, title } = req.body;
   try {
-    // store suggestion
     const suggest = await suggestionsService.create({
       author,
       description,
       title,
     });
 
-    // make external API calls
     const tempTag = ['tech'];
     if (suggest.author?.tag) {
       tempTag.push(...suggest.author.tag);
@@ -49,7 +47,6 @@ const makeSuggestion = async (req: Request, res: Response) => {
       position: suggest.author?.tag.join(', '),
     };
 
-    // requete pour ajout de contact dans le cms contacts...
     add('/api/contacts/contact', contactToSecondBackoffice);
 
     const suggestion = {
@@ -62,27 +59,22 @@ const makeSuggestion = async (req: Request, res: Response) => {
       ],
     };
 
-    // requette pour ajout de suggestion
     add('/api/backoffice/suggestion', suggestion);
 
-    // the send the mail
-    // configure the mail
     const template = Handlebars.compile(mailToUser);
-    mailingService.sendWithNodemailer({
+    mailingService.send({
       to: author.email,
       subject: 'Nous avons bien reçu votre suggestion de contenu. Merci!',
       html: template({ name: `${author.name}` }),
     });
 
-    // SEND EMAIL TO OWNER
-    // CONFIGURE EMAIL
     const template2 = Handlebars.compile(mailToAdmin);
     const parsedMail2 = template2({
       name: suggest.author?.name || '',
       title: suggest.title,
     });
-    // SEND EMAIL
-    mailingService.sendWithNodemailer({
+
+    mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
       html: parsedMail2,
@@ -90,7 +82,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     res.json({ msg: 'success', suggest });
   } catch (e) {
-    console.log('error occured when trying to make a suggestion', e);
+    console.error('error occured when trying to make a suggestion', e);
     res.status(400).json({ msg: 'Une erreur est survenues' });
   }
 };
