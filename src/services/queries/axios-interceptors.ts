@@ -31,9 +31,6 @@ const onRequest = async (
     }`,
   };
 
-  console.log('-----------------------');
-  console.log({ baseURL, urlToCall });
-  console.log('-----------------------');
   return {
     ...config,
     baseURL,
