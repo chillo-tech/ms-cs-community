@@ -9,10 +9,10 @@ router.use(authToken);
 
 router
   .route('/')
-  .post(validate(avisZodSchema.createAvisSchema), avisController.giveAvis);
+  .post(validate(avisZodSchema.createAvisSchema), avisController.create);
 
 router
   .route('/formation')
-  .get(validate(avisZodSchema.getAvisViewSchema), avisController.getAvisFormation);
+  .get(validate(avisZodSchema.getAvisViewSchema), avisController.searchAvisFormation);
 
 export { router };

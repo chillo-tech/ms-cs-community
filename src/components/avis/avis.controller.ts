@@ -11,9 +11,8 @@ const confirmationTemplate = readFileSync(
   'utf-8'
 );
 
-const giveAvis = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response) => {
   const { message, nom, email, note, slug, session_id } = req.body;
-  console.log('sessionId', session_id);
   let slugId = 0;
   try {
     if (typeof slug !== 'string' || slug === '') {
@@ -32,8 +31,7 @@ const giveAvis = async (req: Request, res: Response) => {
   try {
     const formation = await search(`/api/backoffice/Formation/${slugId}`);
     const subject = formation.data.titre;
-    // store avis to db
-    const avis = await avisService.createAvis({
+    const avis = await avisService.create({
       nom,
       subject,
       message,
@@ -41,7 +39,6 @@ const giveAvis = async (req: Request, res: Response) => {
       note,
     });
 
-    // store avis to cms
     add('/api/backoffice/avis', {
       texte: message,
       email,
@@ -50,9 +47,8 @@ const giveAvis = async (req: Request, res: Response) => {
       avis_id: session_id,
     });
 
-    // send mail to user
     const template = Handlebars.compile(confirmationTemplate);
-    mailingService.sendWithNodemailer({
+    mailingService.send({
       to: email,
       html: template({ subject, nom }),
       subject: 'Votre avis a ete recu',
@@ -60,14 +56,12 @@ const giveAvis = async (req: Request, res: Response) => {
 
     return res.json({ msg: 'success', avis });
   } catch (err) {
-    console.log('err', err);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
 
-const getAvisFormation = async (req: Request, res: Response) => {
+const searchAvisFormation = async (req: Request, res: Response) => {
   const { slug } = req.query;
-  // let slugId = 0;
   try {
     if (typeof slug !== 'string' || slug === '') {
       throw new Error('invalid slug');
@@ -77,7 +71,6 @@ const getAvisFormation = async (req: Request, res: Response) => {
     if (!id || isNaN(id)) {
       throw new Error('invalid slug');
     }
-    // slugId = id;
   } catch {
     return res.status(400).json({ msg: 'invalid slug' });
   }
@@ -86,7 +79,6 @@ const getAvisFormation = async (req: Request, res: Response) => {
       `/api/backoffice/Formation?fields=*,sessions.*&filter[slug][_eq]=${slug}`
     );
     if (!formation) return res.status(404).json({ msg: 'view not found' });
-    // const sessionId = formation.data.sessions[0]?.Session_id;
     res.json({ msg: 'success', formation: formation.data.data });
   } catch (error) {
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
@@ -94,8 +86,8 @@ const getAvisFormation = async (req: Request, res: Response) => {
 };
 
 const avisController = {
-  giveAvis,
-  getAvisFormation,
+  create,
+  searchAvisFormation,
 };
 
 export { avisController };

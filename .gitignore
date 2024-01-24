@@ -36,6 +36,9 @@ next-env.d.ts
 .env
 .env.test
 .env.local
+<<<<<<< HEAD
 
+=======
+>>>>>>> feature/avis
 
 queries/token.http

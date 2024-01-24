@@ -10,7 +10,6 @@ const getAvis = async (req: Request, res: Response) => {
       `/api/backoffice/avis?fields=*,avis_id.*&limit=10&filter[status][_eq]=published&filter[note][_gte]=4`
     );
 
-    // filtrer les avis
     const preAvis = avis.data.data?.filter((el: any) => el.texte && el.nom);
     const finalAvis: any[] = [];
     const selectedIndex: number[] = [];
@@ -32,7 +31,7 @@ const getAvis = async (req: Request, res: Response) => {
       avis: finalAvis,
     });
   } catch (error) {
-    console.log('error', error);
+    console.error('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
@@ -47,7 +46,7 @@ const getSuggestions = async (req: Request, res: Response) => {
       suggestions: suggestions.data.data,
     });
   } catch (error) {
-    console.log('error', error);
+    console.error('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
@@ -56,4 +55,4 @@ const frontendDataController = {
   getAvis,
   getSuggestions
 }
-export { frontendDataController };
+export { frontendDataController as backofficeController };

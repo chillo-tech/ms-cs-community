@@ -1,6 +1,6 @@
 import { transporter } from './mailing.config';
 
-const sendWithNodemailer = ({
+const send = ({
   to,
   subject,
   html,
@@ -17,12 +17,12 @@ const sendWithNodemailer = ({
       html,
     });
   } catch (err) {
-    console.log('failed to send email', err);
+    console.error('failed to send email', err);
   }
 };
 
 const mailingService = {
-  sendWithNodemailer,
+  send,
 };
 
 export default mailingService;
