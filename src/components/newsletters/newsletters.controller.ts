@@ -1,13 +1,12 @@
-import jwtService from '@components/jwt/jwt.service';
 import mailingService from '@components/mailing/mailing.service';
+import { add as BackOfficeAdd, patch } from '@services/queries';
+import { initEnv } from '@utils/initEnvIronementVariables';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
+import path from 'path';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
-import path from 'path';
-import { initEnv } from '@utils/initEnvIronementVariables';
-import { add as BackOfficeAdd, patch } from '@services/queries';
 
 initEnv();
 
@@ -57,16 +56,14 @@ const add = async (req: Request, res: Response) => {
     const backoffice_contact_id = backofficeResponse.data.data?.id;
     const contactoffice_contact_id = contactOfficeResponse.data.data?.id;
 
-    const token = 'Bearer ' + jwtService.createToken('24h');
-    const unsubscribeLink = `${process.env.API_URI}/api/v1/newsletters/unsubscribe?${querystring.encode(
-      {
-        name: name as string,
-        email,
-        token,
-        backoffice_contact_id,
-        contactoffice_contact_id,
-      }
-    )}`;
+    const unsubscribeLink = `${
+      process.env.FRONTEND_URL
+    }/api/backend/newsletters/unsubscribe?${querystring.encode({
+      name: name as string,
+      email,
+      backoffice_contact_id,
+      contactoffice_contact_id,
+    })}`;
 
     const template1 = Handlebars.compile(templateMailToUserSubscribe);
     mailingService.send({
@@ -119,7 +116,7 @@ const unsubscribe = async (req: Request, res: Response) => {
     });
 
     res.redirect(
-      (process.env.FRONTEND_URI || 'https://chillo.tech/') +
+      (process.env.FRONTEND_URL || 'https://chillo.tech/') +
         '/newsletters/unsubscribe'
     );
   } catch (e) {
@@ -129,3 +126,4 @@ const unsubscribe = async (req: Request, res: Response) => {
 };
 
 export { add, unsubscribe };
+

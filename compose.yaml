@@ -18,6 +18,10 @@ services:
       BACKOFFICE_API_TOKEN: ${BACKOFFICE_API_TOKEN}
       OWNER_EMAIL: ${OWNER_EMAIL}
       OWNER_NAME: ${OWNER_NAME}
+      FRONTEND_URL: ${FRONTEND_URL}
+      CONTACT_API_TOKEN: ${CONTACT_API_TOKEN}
+      CONTACT_API: ${CONTACT_API}
+      
     networks:
       - applications-network
 networks:

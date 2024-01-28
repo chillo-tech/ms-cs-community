@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { avisService } from './avis.services';
 import { readFileSync } from 'fs';
@@ -61,26 +62,38 @@ const create = async (req: Request, res: Response) => {
 };
 
 const searchAvisFormation = async (req: Request, res: Response) => {
-  const { slug } = req.query;
+  const { formationSlug, sessionSlug } = req.query;
   try {
-    if (typeof slug !== 'string' || slug === '') {
+    if (
+      typeof formationSlug !== 'string' ||
+      formationSlug === '' ||
+      typeof sessionSlug !== 'string' ||
+      sessionSlug === ''
+    ) {
       throw new Error('invalid slug');
     }
 
-    const id = parseInt(slug.split('-').at(-1) || '');
-    if (!id || isNaN(id)) {
+    const id = parseInt(formationSlug.split('-').at(-1) || '');
+    const session_id = parseInt(sessionSlug.split('-').at(-1) || '');
+    if (!id || isNaN(id) || !session_id || isNaN(session_id)) {
       throw new Error('invalid slug');
     }
-  } catch {
+  } catch (err) {
+    console.log('error', err);
     return res.status(400).json({ msg: 'invalid slug' });
   }
   try {
     const formation = await search(
-      `/api/backoffice/Formation?fields=*,sessions.*&filter[slug][_eq]=${slug}`
+      `/api/backoffice/Formation?fields=*,Sessions.*&filter[slug][_eq]=${formationSlug}`
     );
     if (!formation) return res.status(404).json({ msg: 'view not found' });
-    res.json({ msg: 'success', formation: formation.data.data });
+    const session = formation.data.data[0].Sessions.find(
+      (el: any) => el.slug === sessionSlug
+    );
+    if (!session) return res.status(404).json({ msg: 'view not found' });
+    res.json({ msg: 'success', formation: formation.data.data, session });
   } catch (error) {
+    console.log('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
