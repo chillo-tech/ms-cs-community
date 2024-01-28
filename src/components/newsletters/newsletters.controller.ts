@@ -58,7 +58,7 @@ const add = async (req: Request, res: Response) => {
     const contactoffice_contact_id = contactOfficeResponse.data.data?.id;
 
     const token = 'Bearer ' + jwtService.createToken('24h');
-    const unsubscribeLink = `${process.env.API_URI}/api/v1/newsletters/unsubscribe?${querystring.encode(
+    const unsubscribeLink = `${process.env.FRONTEND_URL}/api/backend/newsletters/unsubscribe?${querystring.encode(
       {
         name: name as string,
         email,
