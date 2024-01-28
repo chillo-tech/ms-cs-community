@@ -1,10 +1,12 @@
 import mailingService from '@components/mailing/mailing.service';
-import Handlebars from 'handlebars';
-import { Request, Response, NextFunction } from 'express';
-import { readFileSync } from 'fs';
-import path from 'path';
 import { add, search } from '@services/queries';
+import { dateFormat } from '@utils/date-format';
+import { heureFormat } from '@utils/heure-format';
 import { initEnv } from '@utils/initEnvIronementVariables';
+import { NextFunction, Request, Response } from 'express';
+import { readFileSync } from 'fs';
+import Handlebars from 'handlebars';
+import path from 'path';
 initEnv();
 
 const templateMailToCandidate = readFileSync(
@@ -17,8 +19,6 @@ const templateMailToAdmin = readFileSync(
 );
 const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log('req.body', req.body);
-
     const sessionResponse = await search(
       `/api/backoffice/Session/${req.body.data.payload.Session_id}/?fields=*,formation.*`
     );
@@ -28,11 +28,8 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
     const session = sessionResponse.data.data;
 
     const candidate = req.body.data.payload.candidate_id;
-    console.log('candidate', candidate);
-    console.log('session', session);
     // envoyer le mail au candidat
     const templateCandidate = Handlebars.compile(templateMailToCandidate);
-    const startDate = new Date(session.date_heure);
     mailingService.send({
       to: candidate.email,
       subject: `Nous avons bien enregistré votre inscription pour ${candidate.training}: Merci 😊  !`,
@@ -42,10 +39,8 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
         training: candidate.training,
         attentesLink: attentesLink,
         sessionName: session.titre,
-        heure: startDate.getHours() + ':' + startDate.getMinutes(),
-        date: `${startDate.getDate()} / ${
-          startDate.getMonth() + 1
-        } / ${startDate.getFullYear()}`,
+        heure:heureFormat(session.date_heure),
+        date: dateFormat(session.date_heure),
       }),
     });
     // le envoyer le mail à l'admin
@@ -57,9 +52,7 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
         name: `${candidate.firstName} ${candidate.lastName}`,
         formationName: candidate.training,
         sessionName: session.titre,
-        date: `${startDate.getDate()} / ${
-          startDate.getMonth() + 1
-        } / ${startDate.getFullYear()}`,
+        date: dateFormat(session.date_heure),
       }),
     });
     // Enregistrer le candidat dans contacts avec les tags, candidat, prospect, newsletter
@@ -81,3 +74,4 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
 const inscriptionController = { notifyAll };
 
 export { inscriptionController };
+
