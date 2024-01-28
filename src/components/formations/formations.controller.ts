@@ -46,7 +46,7 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
     // le envoyer le mail à l'admin
     const templateAdmin = Handlebars.compile(templateMailToAdmin);
     mailingService.send({
-      to: candidate.email,
+      to: process.env.OWNER_EMAIL || "",
       subject: `Nous avons bien enregistré votre inscription pour ${candidate.training}: Merci 😊  !`,
       html: templateAdmin({
         firstName: candidate.firstName,

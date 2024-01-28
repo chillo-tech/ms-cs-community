@@ -11,7 +11,7 @@ const send = ({
 }) => {
   try {
     transporter.sendMail({
-      from: process.env.OWNER_EMAIL,
+      from: `${process.env.OWNER_NAME} <${process.env.OWNER_EMAIL}>`,
       to,
       subject,
       html,
