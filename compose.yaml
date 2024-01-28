@@ -25,7 +25,6 @@ services:
       DIRECTUS_API_KEY: ${DIRECTUS_API_KEY}
       DIRECTUS_API_URI: ${DIRECTUS_API_URI}
       JWT_TOKEN: ${JWT_TOKEN}
-      FRONTEND_URL: ${FRONTEND_URL}
       
     networks:
       - applications-network
