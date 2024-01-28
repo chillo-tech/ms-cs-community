@@ -126,9 +126,6 @@ jobs:
             echo OWNER_NAME=${{ secrets.OWNER_NAME }} >> ${{ env.FOLDER }}/.env
             echo CONTACT_API_TOKEN=${{ secrets.CONTACT_API_TOKEN }} >> ${{ env.FOLDER }}/.env
             echo CONTACT_API=${{ secrets.CONTACT_API }} >> ${{ env.FOLDER }}/.env
-            echo JWT_TOKEN=${{ secrets.JWT_TOKEN }} >> ${{ env.FOLDER }}/.env
-            echo FRONTEND_URL=${{ secrets.FRONTEND_URL }} >> ${{ env.FOLDER }}/.env
-            echo PATH_TO_MAILS_TEMPLATES=${{ secrets.PATH_TO_MAILS_TEMPLATES }} >> ${{ env.FOLDER }}/.env
             echo FRONTEND_URL=${{ secrets.FRONTEND_URL }} >> ${{ env.FOLDER }}/.env
 
             docker rmi ${{env.IMAGE}}.${{env.IMAGE_VERSION}}
