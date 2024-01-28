@@ -1,4 +1,6 @@
+import { initEnv } from '@utils/initEnvIronementVariables';
 import { transporter } from './mailing.config';
+initEnv()
 
 const send = ({
   to,
