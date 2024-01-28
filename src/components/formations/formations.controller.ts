@@ -49,10 +49,12 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
       to: candidate.email,
       subject: `Nous avons bien enregistré votre inscription pour ${candidate.training}: Merci 😊  !`,
       html: templateAdmin({
-        name: `${candidate.firstName} ${candidate.lastName}`,
+        firstName: candidate.firstName,
+        lastName: candidate.lastName,
         formationName: candidate.training,
         sessionName: session.titre,
         date: dateFormat(session.date_heure),
+        heure:heureFormat(session.date_heure),
       }),
     });
     // Enregistrer le candidat dans contacts avec les tags, candidat, prospect, newsletter

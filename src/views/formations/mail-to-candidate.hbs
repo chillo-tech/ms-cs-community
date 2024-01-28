@@ -3,16 +3,11 @@
     header > h1 { font-size: 16px; } body { font-size: 14px; } main > p {
     display: grid; } a { text-decoration: none; } .links {display: flex; gap:
     4px} b { font-weight: 700; }
-    .upperCase {
-      text-transform: uppercase;
-    }
-    .capitalize {
-      text-transform: capitalize;
-    }
+    
   </style>
   <body>
     <p>
-      Bonjour <span class="capitalize">{{firstName}}</span> <span class="upperCase">{{lastName}}</span>👋,
+      Bonjour <span style="text-transform:capitalize">{{firstName}}</span> <span style="text-transform:uppercase">{{lastName}}</span>👋,
       <br />Je suis Achille de <a href='https://chillo.tech/'>chillo.tech</a>.
     </p>
     Vous venez de vous inscrire à notre prochaine session {{sessionName}} de la formation <b>{{training}}</b>
