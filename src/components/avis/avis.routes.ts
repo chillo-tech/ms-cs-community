@@ -11,6 +11,7 @@ router
   .route('/')
   .post(validate(avisZodSchema.createAvisSchema), avisController.create);
 
+  
 router
   .route('/formation')
   .get(validate(avisZodSchema.getAvisViewSchema), avisController.searchAvisFormation);

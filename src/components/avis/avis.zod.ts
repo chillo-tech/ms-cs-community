@@ -26,7 +26,8 @@ class AvisZodSchema {
   });
   getAvisViewSchema = object({
     query: object({
-      slug: string(),
+      formationSlug: string(),
+      sessionSlug: string(),
     }),
   });
 }

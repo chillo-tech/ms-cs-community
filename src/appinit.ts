@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import express from 'express';
 import { backofficeRouter } from '@components/views';
-import { inscriptionRouter } from '@components/inscription';
+import { formationRouter } from '@components/formations';
 const PREFIX = 'api';
 const VERSION = 'v1';
 initEnv();
@@ -30,6 +30,6 @@ app.use(`/${PREFIX}/${VERSION}/newsletters`, newslettersRouter);
 app.use(`/${PREFIX}/${VERSION}/tokens`, jwtRouter);
 app.use(`/${PREFIX}/${VERSION}/avis`, avisRouter);
 app.use(`/${PREFIX}/${VERSION}/backoffice`, backofficeRouter);
-app.use(`/${PREFIX}/${VERSION}/inscriptions`, inscriptionRouter);
+app.use(`/${PREFIX}/${VERSION}/formations`, formationRouter);
 
 export default app;

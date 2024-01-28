@@ -119,7 +119,7 @@ const unsubscribe = async (req: Request, res: Response) => {
     });
 
     res.redirect(
-      (process.env.FRONTEND_URI || 'https://chillo.tech/') +
+      (process.env.FRONTEND_URL || 'https://chillo.tech/') +
         '/newsletters/unsubscribe'
     );
   } catch (e) {
