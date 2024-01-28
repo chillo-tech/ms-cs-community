@@ -38,5 +38,6 @@ next-env.d.ts
 .env.local
 lt_command
 RRoadmap_inscription.md
+configmaillocal
 
 queries/token.http
