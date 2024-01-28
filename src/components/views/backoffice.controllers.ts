@@ -3,15 +3,17 @@ import { search } from '@services/queries';
 import { Request, Response } from 'express';
 
 const AVIS_LENGTH = 2;
+const MAX_AVIS_BODY_LENGTH = 362;
 
 const getAvis = async (req: Request, res: Response) => {
   try {
     const avis = await search(
-      `/api/backoffice/avis?fields=*,avis_id.*&limit=10&filter[status][_eq]=published&filter[note][_gte]=4`
+      `/api/backoffice/avis?fields=*,avis_id.*&limit=50&filter[status][_eq]=published&filter[note][_gte]=4`
     );
 
-    // filtrer les avis
-    const preAvis = avis.data.data?.filter((el: any) => el.texte && el.nom);
+    const preAvis = avis.data.data?.filter(
+      (el: any) => el.texte && el.nom && el.texte.length <= MAX_AVIS_BODY_LENGTH
+    );
     const finalAvis: any[] = [];
     const selectedIndex: number[] = [];
     if (preAvis.length <= AVIS_LENGTH) {
@@ -32,7 +34,7 @@ const getAvis = async (req: Request, res: Response) => {
       avis: finalAvis,
     });
   } catch (error) {
-    console.log('error', error);
+    console.error('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
@@ -47,13 +49,13 @@ const getSuggestions = async (req: Request, res: Response) => {
       suggestions: suggestions.data.data,
     });
   } catch (error) {
-    console.log('error', error);
+    console.error('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
 
 const frontendDataController = {
   getAvis,
-  getSuggestions
-}
-export { frontendDataController };
+  getSuggestions,
+};
+export { frontendDataController as backofficeController };

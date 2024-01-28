@@ -1,2 +1,2 @@
-export * from './frontend-data.controllers';
-export * from './frontend-data.routes';
+export * from './backoffice.controllers';
+export * from './backoffice.routes';

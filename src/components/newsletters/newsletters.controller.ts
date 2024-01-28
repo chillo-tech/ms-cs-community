@@ -31,14 +31,11 @@ const templateMailToAdminUnsubscribe = readFileSync(
 const add = async (req: Request, res: Response) => {
   const { name, email } = req.body;
   try {
-    // save user
     const user = await newsLettersService.create({
       name,
       email,
       isActive: true,
     });
-
-    // make external API calls
 
     const tempObj = {
       firstName: user.name,
@@ -60,7 +57,6 @@ const add = async (req: Request, res: Response) => {
     const backoffice_contact_id = backofficeResponse.data.data?.id;
     const contactoffice_contact_id = contactOfficeResponse.data.data?.id;
 
-    // send mail to confirm recption
     const token = 'Bearer ' + jwtService.createToken('24h');
     const unsubscribeLink = `${process.env.API_URI}/api/v1/newsletters/unsubscribe?${querystring.encode(
       {
@@ -73,20 +69,16 @@ const add = async (req: Request, res: Response) => {
     )}`;
 
     const template1 = Handlebars.compile(templateMailToUserSubscribe);
-    // the send the mail
-    mailingService.sendWithNodemailer({
+    mailingService.send({
       to: email,
       subject:
         'Nous avons bien reçu votre inscription à notre newsletter. Merci!',
       html: template1({ name: `${name}`, unsubscribeLink }),
     });
 
-    // SEND EMAIL TO OWNER
-    // CONFIGURE EMAIL
     const template2 = Handlebars.compile(templateMailToAdminSubscribe);
-    // SEND EMAIL
 
-    mailingService.sendWithNodemailer({
+    mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvel utilisateur pour la newsletter!',
       html: template2({ name, email }),
@@ -94,7 +86,7 @@ const add = async (req: Request, res: Response) => {
 
     res.json({ msg: 'success', user });
   } catch (e) {
-    console.log('Error when trying to register a user', e);
+    console.error('Error when trying to register a user', e);
     res.status(400).json({ msg: 'something went wrong' });
   }
 };
@@ -103,7 +95,6 @@ const unsubscribe = async (req: Request, res: Response) => {
   const { name, email, backoffice_contact_id, contactoffice_contact_id } =
     req.query;
   try {
-    // delete user
     newsLettersService.remove(email as string);
     patch(`/api/backoffice/contact/${backoffice_contact_id}`, {
       newsletter: false,
@@ -112,18 +103,16 @@ const unsubscribe = async (req: Request, res: Response) => {
     patch(`/api/contacts/contact/${contactoffice_contact_id}`, {
       newsletter: false,
     });
-    // send mail to confirm recption
     const template1 = Handlebars.compile(templateMailToUserUnsubscribe);
-    mailingService.sendWithNodemailer({
+    mailingService.send({
       to: email as string,
       subject:
         'Nous avons bien reçu votre desabonnement aux newsletters, Merci!',
       html: template1({}),
     });
 
-    // SEND EMAIL TO OWNER
     const template2 = Handlebars.compile(templateMailToAdminUnsubscribe);
-    mailingService.sendWithNodemailer({
+    mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
       html: template2({ name, email }),
@@ -134,7 +123,7 @@ const unsubscribe = async (req: Request, res: Response) => {
         '/newsletters/unsubscribe'
     );
   } catch (e) {
-    console.log('error when trying ro unscubscribe a user', e);
+    console.error('error when trying ro unscubscribe a user', e);
     res.status(400).json({ msg: 'something went wrong' });
   }
 };

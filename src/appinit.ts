@@ -6,8 +6,7 @@ import { router as avisRouter } from '@components/avis';
 import { initEnv } from '@utils/initEnvIronementVariables';
 import cors from 'cors';
 import express from 'express';
-import morgan from 'morgan';
-import { frontendDataRouter } from '@components/views';
+import { backofficeRouter } from '@components/views';
 const PREFIX = 'api';
 const VERSION = 'v1';
 initEnv();
@@ -21,14 +20,12 @@ app
       origin: '*',
     })
   )
-  .use(morgan('tiny'))
   .use(express.json());
 
 app.use(`/${PREFIX}/${VERSION}/suggestions`, suggestionsRouter);
 app.use(`/${PREFIX}/${VERSION}/newsletters`, newslettersRouter);
 app.use(`/${PREFIX}/${VERSION}/tokens`, jwtRouter);
 app.use(`/${PREFIX}/${VERSION}/avis`, avisRouter);
-app.use(`/${PREFIX}/${VERSION}/frontend-data-views`, frontendDataRouter);
-// Do your logic here
+app.use(`/${PREFIX}/${VERSION}/backoffice`, backofficeRouter);
 
 export default app;

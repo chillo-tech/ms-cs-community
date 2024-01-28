@@ -8,10 +8,4 @@ const avisSchema = new Schema({
   impression: String,
 });
 
-const avisFrontViewSchema = new Schema({
-  name: String,
-  title: String,
-  description: String,
-});
-
-export { avisFrontViewSchema, avisSchema };
+export { avisSchema };
