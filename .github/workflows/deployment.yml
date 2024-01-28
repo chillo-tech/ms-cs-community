@@ -110,8 +110,8 @@ jobs:
           username: ${{ secrets.PROD_APPLICATIONS_USERNAME }}
           key: ${{ secrets.PROD_APPLICATIONS_SSH_PRIVATE_KEY }}
           script: |
-            docker compose -f ${{ env.FOLDER }}/docker-compose.yml stop
-            docker compose -f ${{ env.FOLDER }}/docker-compose.yml rm -f
+            docker compose -f ${{ env.FOLDER }}/compose.yaml stop
+            docker compose -f ${{ env.FOLDER }}/compose.yaml rm -f
 
             echo BREVO_API_KEY=${{ secrets.BREVO_API_KEY }} >> ${{ env.FOLDER }}/.env
             echo DB_URI=${{ secrets.DB_URI }} >> ${{ env.FOLDER }}/.env
