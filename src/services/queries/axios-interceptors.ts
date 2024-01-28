@@ -18,7 +18,7 @@ const onRequest = async (
   const baseURL = url.includes('/api/backoffice')
     ? process.env.BACKOFFICE_API
     : url.includes('/api/contacts')
-    ? process.env.DIRECTUS_API_URI
+    ? process.env.CONTACT_API
     : '';
   const urlToCall = url
     .replaceAll('/api/backoffice', '/items')
@@ -27,7 +27,7 @@ const onRequest = async (
     Authorization: `Bearer ${
       url.includes('/api/backoffice')
         ? process.env.BACKOFFICE_API_TOKEN
-        : process.env.DIRECTUS_API_KEY
+        : process.env.CONTACT_API_TOKEN
     }`,
   };
 

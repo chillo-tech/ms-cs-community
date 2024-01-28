@@ -1,5 +1,5 @@
 import mailingService from '@components/mailing/mailing.service';
-import { add, search } from '@services/queries';
+import { add, patch, search } from '@services/queries';
 import { dateFormat } from '@utils/date-format';
 import { heureFormat } from '@utils/heure-format';
 import { initEnv } from '@utils/initEnvIronementVariables';
@@ -39,7 +39,7 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
         training: candidate.training,
         attentesLink: attentesLink,
         sessionName: session.titre,
-        heure:heureFormat(session.date_heure),
+        heure: heureFormat(session.date_heure),
         date: dateFormat(session.date_heure),
       }),
     });
@@ -54,7 +54,7 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
         formationName: candidate.training,
         sessionName: session.titre,
         date: dateFormat(session.date_heure),
-        heure:heureFormat(session.date_heure),
+        heure: heureFormat(session.date_heure),
       }),
     });
     // Enregistrer le candidat dans contacts avec les tags, candidat, prospect, newsletter
@@ -73,7 +73,21 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const inscriptionController = { notifyAll };
+const inscrire = async (req: Request, res: Response, next: NextFunction) => {
+  const { session_id, candidats } = req.body;
+  try {
+    const sessionResponse = await search(
+      `/api/backoffice/Session/${session_id}/?fields=*,formation.*,candidat_inscrit,candidats`
+    );
+    console.log('candidats', sessionResponse.data.data.candidat_inscrit);
+    await patch(`/api/backoffice/Session/${session_id}`, {
+      candidats,
+    });
+    res.status(201).json({ msg: 'success' });
+  } catch (error) {
+    next(error);
+  }
+};
+const inscriptionController = { notifyAll, inscrire };
 
 export { inscriptionController };
-

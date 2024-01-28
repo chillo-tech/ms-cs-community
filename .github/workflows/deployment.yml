@@ -124,10 +124,8 @@ jobs:
             echo BACKOFFICE_API_TOKEN=${{ secrets.BACKOFFICE_API_TOKEN }} >> ${{ env.FOLDER }}/.env
             echo OWNER_EMAIL=${{ secrets.OWNER_EMAIL }} >> ${{ env.FOLDER }}/.env
             echo OWNER_NAME=${{ secrets.OWNER_NAME }} >> ${{ env.FOLDER }}/.env
-            echo MS-CS-COMMUNITY_USER_API_TOKEN=${{ secrets.MS-CS-COMMUNITY_USER_API_TOKEN }} >> ${{ env.FOLDER }}/.env
-            echo DIRECTUS_API_KEY=${{ secrets.DIRECTUS_API_KEY }} >> ${{ env.FOLDER }}/.env
-            echo DIRECTUS_API_URI=${{ secrets.DIRECTUS_API_URI }} >> ${{ env.FOLDER }}/.env
-            echo JWT_TOKEN=${{ secrets.JWT_TOKEN }} >> ${{ env.FOLDER }}/.env
+            echo CONTACT_API_TOKEN=${{ secrets.CONTACT_API_TOKEN }} >> ${{ env.FOLDER }}/.env
+            echo CONTACT_API=${{ secrets.CONTACT_API }} >> ${{ env.FOLDER }}/.env
             echo FRONTEND_URL=${{ secrets.FRONTEND_URL }} >> ${{ env.FOLDER }}/.env
             echo API_URI=${{ secrets.API_URI }} >> ${{ env.FOLDER }}/.env
             echo PATH_TO_MAILS_TEMPLATES=${{ secrets.PATH_TO_MAILS_TEMPLATES }} >> ${{ env.FOLDER }}/.env
