@@ -1,13 +1,12 @@
-import jwtService from '@components/jwt/jwt.service';
 import mailingService from '@components/mailing/mailing.service';
+import { add as BackOfficeAdd, patch } from '@services/queries';
+import { initEnv } from '@utils/initEnvIronementVariables';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
+import path from 'path';
 import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
-import path from 'path';
-import { initEnv } from '@utils/initEnvIronementVariables';
-import { add as BackOfficeAdd, patch } from '@services/queries';
 
 initEnv();
 
