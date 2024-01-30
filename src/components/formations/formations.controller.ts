@@ -91,7 +91,6 @@ const inscrire = async (req: Request, res: Response, next: NextFunction) => {
         `${el.phoneIndex}${el.phone}` ===
           `${submittedCandidate.phoneIndex}${submittedCandidate.phone}`
     );
-    console.log('foundedCandidates', foundedCandidates);
     if (foundedCandidates)
       return res.status(400).json({
         msg: 'not allowed, candidate already exist',
@@ -145,7 +144,6 @@ const inscrire = async (req: Request, res: Response, next: NextFunction) => {
     const response = await patch(`/api/backoffice/Session/${session_id}`, {
       candidats,
     });
-    console.log('res', response.data);
     res.status(201).json(response.data);
   } catch (error) {
     next(error);
