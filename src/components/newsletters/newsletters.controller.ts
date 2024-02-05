@@ -126,3 +126,4 @@ const unsubscribe = async (req: Request, res: Response) => {
 };
 
 export { add, unsubscribe };
+

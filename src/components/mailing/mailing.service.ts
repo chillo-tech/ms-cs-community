@@ -1,4 +1,6 @@
+import { initEnv } from '@utils/initEnvIronementVariables';
 import { transporter } from './mailing.config';
+initEnv()
 
 const send = ({
   to,
@@ -11,7 +13,7 @@ const send = ({
 }) => {
   try {
     transporter.sendMail({
-      from: process.env.OWNER_EMAIL,
+      from: `${process.env.OWNER_NAME} <${process.env.OWNER_EMAIL}>`,
       to,
       subject,
       html,

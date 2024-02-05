@@ -5,10 +5,6 @@ import { initEnv } from '@utils/initEnvIronementVariables';
 
 initEnv();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
   const res = await dbInit();

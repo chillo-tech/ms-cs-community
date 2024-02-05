@@ -36,7 +36,12 @@ next-env.d.ts
 .env
 .env.test
 .env.local
+<<<<<<< HEAD
+
+=======
+>>>>>>> feature/avis
 lt_command
 RRoadmap_inscription.md
+configmaillocal
 
 queries/token.http
