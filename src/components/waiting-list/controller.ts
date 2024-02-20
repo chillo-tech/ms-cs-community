@@ -85,7 +85,6 @@ const getVideoInfos = async (
   }
 };
 
-/
 
 const waitingListController = {
   subscribe,
