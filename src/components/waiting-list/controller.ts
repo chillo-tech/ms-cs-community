@@ -10,7 +10,6 @@ import mailingService from '@components/mailing/mailing.service';
 const subscribe = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, videoId } = req.body;
 
-
   try {
     const mailToUser = readFileSync(
       path.join(
@@ -29,6 +28,9 @@ const subscribe = async (req: Request, res: Response, next: NextFunction) => {
 
     const candidatResponse = await add('/api/backoffice/candidate', {
       lastName: name,
+      firstName: '',
+      phoneIndex: '',
+      phone: '',
       email,
     });
     const candidate = candidatResponse.data.data;
@@ -67,7 +69,6 @@ const subscribe = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-
 const getVideoInfos = async (
   req: Request,
   res: Response,
@@ -84,6 +85,7 @@ const getVideoInfos = async (
     next(error);
   }
 };
+
 
 
 const waitingListController = {
