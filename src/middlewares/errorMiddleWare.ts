@@ -6,7 +6,6 @@ import { NextFunction, Request, Response } from 'express';
 const errorMiddleWareFactory = (context: { endpoint: string }) => {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
     console.log('address :', req.socket.remoteAddress);
-    console.log('endpoint :', context.endpoint);
     if (err instanceof AppError) {
       console.log('user error', err.stack);
       switch (err.commonType) {
