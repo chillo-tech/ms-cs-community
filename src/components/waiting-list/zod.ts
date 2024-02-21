@@ -1,13 +1,13 @@
 import { object, string } from 'zod';
 
-class NewslettersZodSchema {
+class WaitingListZodSchema {
   getVideoSchema = object({
     query: object({
       id: string().uuid(),
     }),
   });
 
-  subscribetoWaitingListSchema = object({
+  subscribetoWaitingList = object({
     body: object({
       name: string(),
       email: string().email(),
@@ -16,5 +16,5 @@ class NewslettersZodSchema {
   });
 }
 
-const newslettersZodSchema = new NewslettersZodSchema();
-export default newslettersZodSchema;
+const waitingListZodSchema = new WaitingListZodSchema();
+export default waitingListZodSchema;
