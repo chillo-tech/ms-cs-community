@@ -1,12 +1,9 @@
-import { number, object, string, union } from 'zod';
+import { object, string } from 'zod';
 
 class NewslettersZodSchema {
-  createNewSlugSchema = object({
-    body: object({
-      title: string().optional(),
-      video: string().url(),
-      formationSlug: string().optional(),
-      sessionsSlug: string().optional(),
+  getVideoSchema = object({
+    query: object({
+      id: string().uuid(),
     }),
   });
 
@@ -14,22 +11,7 @@ class NewslettersZodSchema {
     body: object({
       name: string(),
       email: string().email(),
-    }),
-  });
-
-  unscrubcribeToWaitingListSchema = object({
-    query: object({
-      name: string(),
-      email: string().email(),
-    }),
-  });
-
-  deleteNewslettersUserSchema = object({
-    query: object({
-      name: string(),
-      email: string().email(),
-      backoffice_contact_id: union([string(), number()]),
-      contactoffice_contact_id: union([string(), number()]),
+      videoId: string().uuid(),
     }),
   });
 }

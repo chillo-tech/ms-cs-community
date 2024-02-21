@@ -9,6 +9,7 @@ app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
   const res = await dbInit();
   if (res) console.log('succesfully connected to mongodb');
+  else console.log('connection to db ERROR');
 });
 
 process.on('unhandledRejection', err => {

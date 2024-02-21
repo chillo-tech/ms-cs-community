@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
-import { readFileSync } from 'fs';
-import path from 'path';
-import { add, search } from '@services/queries';
-import Handlebars from 'handlebars';
 import mailingService from '@components/mailing/mailing.service';
-
-// const tag = 'waiting-list';
+import { add, search } from '@services/queries';
+import { AppError } from '@utils/Errors/AppError';
+import { NextFunction, Request, Response } from 'express';
+import { readFileSync } from 'fs';
+import Handlebars from 'handlebars';
+import path from 'path';
 
 const subscribe = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, videoId } = req.body;
@@ -49,17 +48,21 @@ const subscribe = async (req: Request, res: Response, next: NextFunction) => {
     mailingService.send({
       to: email,
       subject: 'Nous avons bien reçu votre inscription. Merci!',
-      html: templateToUser({ name, lien: video.lien, video: video.title }),
+      html: templateToUser({ name, lien: video.lien, video: video.titre }),
     });
 
     const templateMailToAdmin = Handlebars.compile(mailToAdmin);
     mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
       subject: 'Nouvelle suggestion de contenu!',
-      html: templateMailToAdmin({ name, lien: video.lien, video: video.title }),
+      html: templateMailToAdmin({
+        name,
+        lien: video.lien,
+        video: video.titre || 'chillo.tech',
+      }),
     });
 
-    res.json({
+    return res.json({
       msg: 'success',
       candidate,
       video,
@@ -77,16 +80,14 @@ const getVideoInfos = async (
   try {
     const { id } = req.query;
     if (!(id instanceof String || typeof id === 'string'))
-      return res.status(400).send('malformed id');
+      throw new AppError('invalidInput', "mauvaise entree sur l'id", true);
     const videoResponse = await search(`/api/backoffice/video/${id}`);
     const video = videoResponse.data.data;
-    res.json({ msg: 'succes', video });
+    return res.json({ msg: 'succes', video });
   } catch (error) {
     next(error);
   }
 };
-
-
 
 const waitingListController = {
   subscribe,
