@@ -54,7 +54,7 @@ const subscribe = async (req: Request, res: Response, next: NextFunction) => {
     const templateMailToAdmin = Handlebars.compile(mailToAdmin);
     mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
-      subject: 'Nouvelle suggestion de contenu!',
+      subject: `Nouvelle inscription a la liste d'attente de ${video.titre}!`,
       html: templateMailToAdmin({
         name,
         lien: video.lien,
