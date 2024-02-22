@@ -1,9 +1,9 @@
-import { object, string } from 'zod';
+import { number, object, string } from 'zod';
 
 class WaitingListZodSchema {
-  getVideoSchema = object({
+  getFormationSchema = object({
     query: object({
-      id: string().uuid(),
+      id: number(),
     }),
   });
 
@@ -11,7 +11,7 @@ class WaitingListZodSchema {
     body: object({
       name: string(),
       email: string().email(),
-      videoId: string().uuid(),
+      formationId: number(),
     }),
   });
 }

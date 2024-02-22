@@ -7,7 +7,7 @@ import Handlebars from 'handlebars';
 import path from 'path';
 
 const subscribe = async (req: Request, res: Response, next: NextFunction) => {
-  const { name, email, videoId } = req.body;
+  const { name, email, formationId } = req.body;
 
   try {
     const mailToUser = readFileSync(
@@ -25,47 +25,56 @@ const subscribe = async (req: Request, res: Response, next: NextFunction) => {
       'utf-8'
     );
 
+    const formationResponse = await search(
+      `/api/backoffice/Formation/${formationId}/?fields=*,attentes.*`
+    );
+
+    const formation = formationResponse.data.data;
+
+    const attentes = formation.attentes as { email: string }[];
+
+    if (attentes.find(candidate => candidate.email === email)) {
+      throw new AppError('conflict', 'Votre email est deja enregistré', true, {
+        ressource: 'email',
+      });
+    }
+
     const candidatResponse = await add('/api/backoffice/candidate', {
       lastName: name,
       firstName: '',
       phoneIndex: '',
       phone: '',
       email,
+      attente_id: formation.id,
     });
     const candidate = candidatResponse.data.data;
-
-    // recherche de la video
-    const videoResponse = await search(`/api/backoffice/video/${videoId}`);
-    const video = videoResponse.data.data;
-
-    // association de la video et du candidat
-    await add(`/api/backoffice/video_candidate`, {
-      video_id: videoId,
-      candidate_id: candidate.id,
-    });
 
     const templateToUser = Handlebars.compile(mailToUser);
     mailingService.send({
       to: email,
       subject: 'Nous avons bien reçu votre inscription. Merci!',
-      html: templateToUser({ name, lien: video.lien, video: video.titre }),
+      html: templateToUser({
+        name,
+        lien: formation.lien,
+        titre: formation.titre,
+      }),
     });
 
     const templateMailToAdmin = Handlebars.compile(mailToAdmin);
     mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
-      subject: `Nouvelle inscription a la liste d'attente de ${video.titre}!`,
+      subject: `Nouvelle inscription a la liste d'attente de ${formation.titre}!`,
       html: templateMailToAdmin({
         name,
-        lien: video.lien,
-        video: video.titre || 'chillo.tech',
+        lien: formation.lien,
+        titre: formation.titre,
       }),
     });
 
     return res.json({
       msg: 'success',
       candidate,
-      video,
+      formation,
     });
   } catch (error) {
     next(error);
@@ -89,9 +98,27 @@ const getVideoInfos = async (
   }
 };
 
+const getFormation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.query;
+    if (!(id instanceof String || typeof id === 'string'))
+      throw new AppError('invalidInput', "mauvaise entree sur l'id", true);
+    const formationResponse = await search(`/api/backoffice/Formation/${id}`);
+    const formation = formationResponse.data.data;
+    return res.json({ msg: 'succes', formation });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const waitingListController = {
   subscribe,
   getVideoInfos,
+  getFormation,
 };
 
 export { waitingListController };

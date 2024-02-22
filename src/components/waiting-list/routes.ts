@@ -13,10 +13,10 @@ waitingListRouter.post(
 );
 
 waitingListRouter
-  .route('/video')
+  .route('/formation')
   .get(
-    validate(waitingListZodSchema.getVideoSchema),
-    waitingListController.getVideoInfos
+    validate(waitingListZodSchema.getFormationSchema),
+    waitingListController.getFormation
   );
 
 waitingListRouter.use(errorMiddleWareFactory({ endpoint: 'waiting-list' }));
