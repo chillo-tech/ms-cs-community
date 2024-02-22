@@ -104,11 +104,27 @@ const getFormation = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.query;
-    if (!(id instanceof String || typeof id === 'string'))
-      throw new AppError('invalidInput', "mauvaise entree sur l'id", true);
-    const formationResponse = await search(`/api/backoffice/Formation/${id}`);
-    const formation = formationResponse.data.data;
+    const { slug } = req.query;
+    if (!(slug instanceof String || typeof slug === 'string'))
+      throw new AppError('invalidInput', 'mauvaise entree sur le slug', true, {
+        ressource: 'slug',
+      });
+    const formationResponse = await search(
+      `/api/backoffice/Formation/?filter[slug][_eq]=${slug}`
+    );
+    if (formationResponse.data.data?.length === 0) {
+      throw new AppError(
+        'notFound',
+        "la formation demandée n'existe pas",
+        true,
+        { ressource: 'formation' }
+      );
+    }
+
+    const formation = formationResponse.data.data[0];
+
+    console.log('formationResponse', formationResponse);
+    console.log('formation', formation);
     return res.json({ msg: 'succes', formation });
   } catch (error) {
     next(error);
