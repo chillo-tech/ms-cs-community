@@ -1,5 +1,26 @@
 import { NextFunction, Request, Response } from 'express';
-import { AnyZodObject } from 'zod';
+import { AnyZodObject, ZodError } from 'zod';
+import { ErrorMessageOptions, generateErrorMessage } from 'zod-error';
+
+const options: ErrorMessageOptions = {
+  maxErrors: 5,
+  delimiter: {
+    component: ' - ',
+  },
+  path: {
+    enabled: true,
+    type: 'breadcrumbs',
+    label: 'Path: ',
+  },
+  code: {
+    enabled: false,
+  },
+  message: {
+    enabled: true,
+    label: '',
+  },
+  
+};
 
 const validate =
   (schema: AnyZodObject) =>
@@ -12,9 +33,10 @@ const validate =
       });
       next();
     } catch (error) {
+      const err = error as ZodError;
       return res.status(400).json({
         message: 'something went wront on validation',
-        error,
+        description: generateErrorMessage(err.issues, options),
       });
     }
   };
