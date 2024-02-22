@@ -3,7 +3,7 @@ import { number, object, string } from 'zod';
 class WaitingListZodSchema {
   getFormationSchema = object({
     query: object({
-      id: number(),
+      id: string(),
     }),
   });
 
