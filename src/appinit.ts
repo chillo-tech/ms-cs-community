@@ -9,6 +9,7 @@ import cors from 'cors';
 import express from 'express';
 import { backofficeRouter } from '@components/views';
 import { formationRouter } from '@components/formations';
+import { attentesRouter } from '@components/attentes/attentes.router';
 const PREFIX = 'api';
 const VERSION = 'v1';
 initEnv();
@@ -31,5 +32,6 @@ app.use(`/${PREFIX}/${VERSION}/tokens`, jwtRouter);
 app.use(`/${PREFIX}/${VERSION}/avis`, avisRouter);
 app.use(`/${PREFIX}/${VERSION}/backoffice`, backofficeRouter);
 app.use(`/${PREFIX}/${VERSION}/formations`, formationRouter);
+app.use(`/${PREFIX}/${VERSION}/attentes`, attentesRouter);
 
 export default app;
