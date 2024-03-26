@@ -5,18 +5,21 @@ class AttenteZodSchema {
     body: object({
       email: string(),
       message: string({
-        invalid_type_error: 'the message should be a string',
+        invalid_type_error: 'Le message doit être une chaîne de caractères',
       }),
       phoneNumber: string({
-        invalid_type_error: 'the phoneNumber should be a string',
+        invalid_type_error:
+          'Le numéro de téléphone doit être une chaîne de caractères',
       }),
       phoneIndex: string({
-        invalid_type_error: 'the phoneIndex should be a string',
+        invalid_type_error:
+          "L'index téléphonique doit être une chaîne de caractères",
       }),
       sessionId: string({
-        invalid_type_error: 'the id should be a string',
+        invalid_type_error:
+          "L'id de la session doit être une chaîne de caractères",
       }),
-    })
+    }),
   });
 }
 
