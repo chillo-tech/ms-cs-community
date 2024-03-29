@@ -17,7 +17,7 @@ const create = async (req: Request, res: Response) => {
     lastName,
     email,
     phoneNumber = '',
-    // newsletter,
+    newsletter,
     phoneIndex = '',
     channel,
   } = req.body;
@@ -48,7 +48,7 @@ const create = async (req: Request, res: Response) => {
       phone: phoneNumber,
       name: `${firstName} ${lastName}`,
       email: email,
-      tags: 'devdelopper, tech, newsletter',
+      tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
       position: 'client',
     });
 
@@ -57,7 +57,7 @@ const create = async (req: Request, res: Response) => {
       phone: phoneNumber,
       name: `${firstName} ${lastName}`,
       email: email,
-      tags: 'devdelopper, tech, newsletter',
+      tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
       position: 'client',
     });
 
