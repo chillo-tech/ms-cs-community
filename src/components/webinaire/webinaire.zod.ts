@@ -1,16 +1,19 @@
-
 import { boolean, object, string } from 'zod';
 
 class WebinaireZodSchema {
   createWebinaireSchema = object({
     body: object({
-      nom: string(),
-      prenom: string(),
-      numero_telephone: string(),
-      consentement_marketing: boolean(),
-      connaissance_webinaire: string(),
-      adresse_mail : string().email(),
-      date_inscription: string().datetime(),
+      firstName: string(),
+      lastName: string(),
+      email: string().email(),
+      phoneIndex: string().optional(),
+      phoneNumber: string().optional(),
+      channel: string(),
+      newsletter: boolean(),
+    }),
+    params: object({
+      webinaire_id: string(),
+      planning_id: string(),
     }),
   });
 }
