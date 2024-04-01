@@ -66,16 +66,6 @@ const create = async (req: Request, res: Response) => {
       position: 'client',
     });
 
-    const template = Handlebars.compile(templateMailToAdmin);
-    mailingService.send({
-      to: process.env.OWNER_EMAIL || '',
-      subject: `Nouvelle reponse au webinaire !`,
-      html: template({
-        name: `${firstName} ${lastName}`,
-      }),
-    });
-
-
     const {
       data: { data: webinaire },
     } = await search(
@@ -89,7 +79,17 @@ const create = async (req: Request, res: Response) => {
       subject: `Nous avons bien recu votre inscription`,
       html: templateUserMail({
         name: `${firstName} ${lastName}`,
-        title : webinaire.title,
+        title: webinaire.title,
+      }),
+    });
+
+    const template = Handlebars.compile(templateMailToAdmin);
+    mailingService.send({
+      to: process.env.OWNER_EMAIL || '',
+      subject: `Nouvelle reponse au webinaire !`,
+      html: template({
+        name: `${firstName} ${lastName}`,
+        title: webinaire.title,
       }),
     });
 
