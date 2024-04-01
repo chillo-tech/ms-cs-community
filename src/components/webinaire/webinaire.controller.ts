@@ -9,6 +9,11 @@ const templateMailToAdmin = readFileSync(
   'utf-8'
 );
 
+const templateMailToUser = readFileSync(
+  path.join(__dirname, '../../views/webinaire/mail-to-user.hbs'),
+  'utf-8'
+);
+
 const create = async (req: Request, res: Response) => {
   const { planning_id, webinaire_id } = req.params;
 
@@ -70,13 +75,23 @@ const create = async (req: Request, res: Response) => {
       }),
     });
 
+
     const {
       data: { data: webinaire },
     } = await search(
       `/api/backoffice/webinaire/${webinaire_id}?fields=*,company.*`
     );
 
-    console.log('company', webinaire.company?.id);
+    const templateUserMail = Handlebars.compile(templateMailToUser);
+
+    mailingService.send({
+      to: email,
+      subject: `Nous avons bien recu votre inscription`,
+      html: templateUserMail({
+        name: `${firstName} ${lastName}`,
+        title : webinaire.title,
+      }),
+    });
 
     if (webinaire.company?.id) {
       let channel_id = 0;

@@ -9,7 +9,7 @@ class WebinaireZodSchema {
       phoneIndex: string().optional(),
       phoneNumber: string().optional(),
       channel: string(),
-      newsletter: boolean(),
+      newsletter: boolean().optional(),
     }),
     params: object({
       webinaire_id: string(),
