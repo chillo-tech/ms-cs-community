@@ -45,7 +45,7 @@ const add = async (req: Request, res: Response) => {
     };
 
     const backofficeResponse = await BackOfficeAdd(
-      '/api/backoffice/contact',
+      '/api/backoffice/contacts',
       tempObj
     );
     const contactOfficeResponse = await BackOfficeAdd(

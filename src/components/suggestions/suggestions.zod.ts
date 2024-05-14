@@ -5,7 +5,8 @@ class SuggestionsZodSchema {
   createSuggestionsSchema = object({
     body: object({
       author: object({
-        name: string(),
+        firstName: string(),
+        lastName: string(),
         email: string().email(),
         tag: ZodEnum.create(POSITIONS)
           .array()

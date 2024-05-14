@@ -31,17 +31,22 @@ const makeSuggestion = async (req: Request, res: Response) => {
     }
 
     const contact = {
-      phoneIndex: suggest.author?.phoneIndex?.toString(),
+      phone_index: suggest.author?.phoneIndex?.toString(),
       phone: suggest.author?.phone?.toString(),
-      firstName: suggest.author?.name,
+      first_name: suggest.author?.firstName,
+      last_name: suggest.author?.lastName,
       email: suggest.author?.email,
       tags: tempTag.join(', '),
       position: suggest.author?.tag.join(', '),
     };
+
+    const contactAddedRes = await add('/api/backoffice/contacts', contact);
+
     const contactToSecondBackoffice = {
-      phoneindex: suggest.author?.phoneIndex?.toString(),
+      phoneIndex: suggest.author?.phoneIndex?.toString(),
       phone: suggest.author?.phone?.toString(),
-      name: suggest.author?.name,
+      firstName: suggest.author?.firstName,
+      lastName: suggest.author?.lastName,
       email: suggest.author?.email,
       tags: tempTag.join(', '),
       position: suggest.author?.tag.join(', '),
@@ -50,16 +55,12 @@ const makeSuggestion = async (req: Request, res: Response) => {
     add('/api/contacts/contact', contactToSecondBackoffice);
 
     const suggestion = {
-      titre: suggest.title,
+      title: suggest.title,
       description: suggest.description,
-      suggestion_contact: [
-        {
-          contact_id: contact,
-        },
-      ],
+      author: contactAddedRes.data.data.id,
     };
 
-    add('/api/backoffice/suggestion', suggestion);
+    add('/api/backoffice/suggestions', suggestion);
 
     const template = Handlebars.compile(mailToUser);
     mailingService.send({
@@ -70,7 +71,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
 
     const template2 = Handlebars.compile(mailToAdmin);
     const parsedMail2 = template2({
-      name: suggest.author?.name || '',
+      name: suggest.author?.firstName || '',
       title: suggest.title,
     });
 
