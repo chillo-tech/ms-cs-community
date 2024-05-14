@@ -34,7 +34,7 @@ const getAvis = async (req: Request, res: Response) => {
       avis: finalAvis,
     });
   } catch (error) {
-    console.error('error', error);
+    // console.error('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
@@ -42,14 +42,14 @@ const getAvis = async (req: Request, res: Response) => {
 const getSuggestions = async (req: Request, res: Response) => {
   try {
     const suggestions = await search(
-      '/api/backoffice/suggestion?fields=*,suggestion_contact.contact_id.*&limit=20&filter[status][_eq]=published&filter[statut][_eq]=VALIDE'
+      '/api/backoffice/suggestions?fields=*,suggestion_contact.contact_id.*&limit=20&filter[status][_eq]=published&filter[statut][_eq]=VALIDE'
     );
     res.json({
       msg: 'success',
       suggestions: suggestions.data.data,
     });
   } catch (error) {
-    console.error('error', error);
+    // console.error('error', error);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };

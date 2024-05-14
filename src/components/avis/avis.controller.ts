@@ -43,7 +43,8 @@ const create = async (req: Request, res: Response) => {
     add('/api/backoffice/avis', {
       texte: message,
       email,
-      nom,
+      first_name: nom,
+      last_mame:"",
       note,
       avis_id: session_id,
     });

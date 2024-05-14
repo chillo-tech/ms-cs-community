@@ -63,12 +63,24 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
     const contactToContactOffice = {
       phoneindex: candidate.phoneIndex,
       phone: candidate.phone,
-      name: `${candidate.firstName} ${candidate.lastName}`,
+      firstName: candidate.firstName ,
+      lastName: candidate.lastName,
       email: candidate.email,
       tags: 'devdelopper, tech, newsletter',
       position: 'client',
     };
     add('/api/contacts/contact', contactToContactOffice);
+
+    const contactToBackOffice = {
+      phone_index: candidate.phoneIndex,
+      phone: candidate.phone,
+      first_name: candidate.firstName,
+      last_name: candidate.lastName,
+      email: candidate.email,
+      tags: 'devdelopper, tech, newsletter',
+      position: 'client',
+    };
+    add('/api/backoffice/contacts', contactToBackOffice);
     res.json({ msg: 'success' });
   } catch (error) {
     next(error);
