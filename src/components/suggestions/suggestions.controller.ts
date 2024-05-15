@@ -5,6 +5,7 @@ import mailingService from '@components/mailing/mailing.service';
 import fs from 'fs';
 import { add } from '@services/queries';
 import path from 'path';
+import { contactService } from '@components/contact/contact.services';
 
 const mailToUser = fs.readFileSync(
   path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),
@@ -24,6 +25,8 @@ const makeSuggestion = async (req: Request, res: Response) => {
       description,
       title,
     });
+
+    contactService.create(author);
 
     const tempTag = ['tech'];
     if (suggest.author?.tag) {

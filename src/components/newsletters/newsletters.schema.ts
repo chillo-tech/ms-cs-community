@@ -1,7 +1,8 @@
 import { Schema } from 'mongoose';
 
 export const newslettersUserSchema = new Schema({
-  name: String,
+  firstName: String,
+  lastName: String,
   email: String,
   isActive: Boolean,
 });

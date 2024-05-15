@@ -1,5 +1,6 @@
 export type User = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   isActive?: boolean;
 };
