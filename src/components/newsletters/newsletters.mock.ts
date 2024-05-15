@@ -1,6 +1,7 @@
 export const data = [
   {
-    name: 'John DOE',
+    firstName: 'DOE',
+    lastName: 'John',
     email: 'johndoe@gmail.com',
   },
 ];

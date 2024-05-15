@@ -3,7 +3,8 @@ import { number, object, string, union } from 'zod';
 class NewslettersZodSchema {
   createNewslettersUserSchema = object({
     body: object({
-      name: string(),
+      firstName: string(),
+      lastName: string(),
       email: string().email(),
     }),
   });

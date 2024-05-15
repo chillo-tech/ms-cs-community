@@ -1,29 +1,21 @@
 <html>
   <style>
-    header > h1 {
-      font-size: 13px;
-      font-weight: normal;
-    }
-
-    body {
-      font-size: 14px;
-    }
-
-    main > p {
-      display: grid;
-    }
-    a {
-      text-decoration: none;
-    }
+    header > h1 { font-size: 16px; } body { font-size: 14px; } main > p {
+    display: grid; } a { text-decoration: none; }
     .links {display: flex; gap: 4px}
   </style>
   <body>
-    <p>
-      Bonjour 👋,
-      <br />
-      Vous avez recu un nouveau message depuis <b>{{appName}}</b>
-    </p>
-    <p>voici son mail : <b>{{email}}</b></p>
+     <p>
+        Bonjour
+        {{name}}👋,
+        <br />
+        Je suis Achille de
+        <a href='https://chillo.tech' _target='blank'>chillo.tech</a>
+      </p>
+      <p>
+         <p>Nous venons de recevoir votre inscription à nos newsletters.</p>
+    <p>Nous sommes ravis de vous compter parmis notre communauté.</p>
+    <p>Pour toute question ou suggestion n'hésitez pas à nous contacter.</p>
     <p>
       Bien à vous,
       <br />
@@ -44,5 +36,6 @@
         href='https://www.facebook.com/profile.php?id=100084306755977'
       >facebook</a>
     </p>
+    <p><a style="border-bottom: 1px solid blue;" href='{{unsubscribeLink}}'>Cliquez ici pour vous desabonner</a></p>
   </body>
 </html>
