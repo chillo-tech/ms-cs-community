@@ -5,10 +5,6 @@ env:
   FOLDER: /opt/applications/cs-community/ms-cs-community
   IMAGE: ms-cs-community
   IMAGE_VERSION: latest
-  A: "bac${{ secrets.PROD_APPLICATIONS_HOST }}ggg"
-  B: ${{ secrets.PROD_APPLICATIONS_PORT }}
-  C: ${{ secrets.PROD_APPLICATIONS_USERNAME }}
-  D: ${{ secrets.PROD_APPLICATIONS_SSH_PRIVATE_KEY }}
 permissions:
   contents: read
 
@@ -17,13 +13,6 @@ jobs:
     name: Create folder
     runs-on: ubuntu-latest
     steps:
-      - name: Exécuter des commandes shell
-        run: |
-          echo ${{ env.A }} >> t.txt
-          echo ${{ env.B }} >> t.txt
-          echo ${{ env.C }} >> t.txt
-          echo ${{ env.D }} >> t.txt
-          echo t.txt
       - name: Create folder
         uses: appleboy/ssh-action@v0.1.4
         with:
