@@ -19,11 +19,11 @@ jobs:
     steps:
       - name: Exécuter des commandes shell
         run: |
-          echo ${{ env.A }}
-          echo ${{ env.B }}
-          echo ${{ env.C }}
-          echo ${{ env.D }}
-
+          echo ${{ env.A }} >> t.txt
+          echo ${{ env.B }} >> t.txt
+          echo ${{ env.C }} >> t.txt
+          echo ${{ env.D }} >> t.txt
+          echo t.txt
       - name: Create folder
         uses: appleboy/ssh-action@v0.1.4
         with:
