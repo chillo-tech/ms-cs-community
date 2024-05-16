@@ -28,7 +28,7 @@ const handleContact = async (req: Request, res: Response) => {
 
     const template2 = Handlebars.compile(templateMailToAdmin);
     mailingService.send({
-      to: data.email,
+      to: process.env.OWNER_EMAIL || "",
       subject: `Nouveau message depuis ${appName}`,
       html: template2({ email: data.email, appName, message: data.message }),
     });
