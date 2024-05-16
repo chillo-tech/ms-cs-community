@@ -5,7 +5,7 @@ env:
   FOLDER: /opt/applications/cs-community/ms-cs-community
   IMAGE: ms-cs-community
   IMAGE_VERSION: latest
-  A: ${{ secrets.PROD_APPLICATIONS_HOST }}
+  A: "bac${{ secrets.PROD_APPLICATIONS_HOST }}ggg"
   B: ${{ secrets.PROD_APPLICATIONS_PORT }}
   C: ${{ secrets.PROD_APPLICATIONS_USERNAME }}
   D: ${{ secrets.PROD_APPLICATIONS_SSH_PRIVATE_KEY }}
