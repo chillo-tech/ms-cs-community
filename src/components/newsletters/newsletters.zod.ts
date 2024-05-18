@@ -1,4 +1,4 @@
-import { number, object, string, union } from 'zod';
+import { object, string } from 'zod';
 
 class NewslettersZodSchema {
   createNewslettersUserSchema = object({
@@ -10,10 +10,7 @@ class NewslettersZodSchema {
   });
   deleteNewslettersUserSchema = object({
     query: object({
-      name: string(),
-      email: string().email(),
-      backoffice_contact_id: union([string(), number()]),
-      contactoffice_contact_id: union([string(), number()]),
+      payload: string(),
     }),
   });
 }

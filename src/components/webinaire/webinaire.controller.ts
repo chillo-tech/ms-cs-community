@@ -66,12 +66,11 @@ const create = async (req: Request, res: Response) => {
       position: 'client',
     });
 
-    const {
-      data: { data: webinaire },
-    } = await search(
+    const webinaireResponse = await search(
       `/api/backoffice/webinaire/${webinaire_id}?fields=*,company.*`
     );
 
+    const webinaire = webinaireResponse?.data.data;
     const templateUserMail = Handlebars.compile(templateMailToUser);
 
     mailingService.send({

@@ -5,9 +5,10 @@ import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import Handlebars from 'handlebars';
 import path from 'path';
-import querystring from 'querystring';
 import newsLettersService from './newsletters.service';
 import { contactService } from '@components/contact/contact.services';
+import jwtService from '@components/jwt/jwt.service';
+import { AxiosResponse } from 'axios';
 
 initEnv();
 
@@ -20,11 +21,17 @@ const templateMailToAdminSubscribe = readFileSync(
   'utf-8'
 );
 const templateMailToUserUnsubscribe = readFileSync(
-  path.join(__dirname, '../../views/newsletters/template-mail-to-user.hbs'),
+  path.join(
+    __dirname,
+    '../../views/newsletters/template-mail-to-user-unsubscribe.hbs'
+  ),
   'utf-8'
 );
 const templateMailToAdminUnsubscribe = readFileSync(
-  path.join(__dirname, '../../views/newsletters/template-mail-to-admin.hbs'),
+  path.join(
+    __dirname,
+    '../../views/newsletters/template-mail-to-admin-unsubscribe.hbs'
+  ),
   'utf-8'
 );
 
@@ -48,31 +55,45 @@ const add = async (req: Request, res: Response) => {
       tags: 'newsletter',
     });
 
-    const backofficeResponse = await BackOfficeAdd('/api/backoffice/contacts', {
-      first_name: firstName,
-      last_name: lastName,
-      tags: 'newsletter',
-      newsletter: true,
-      email
-    });
-    const contactOfficeResponse = await BackOfficeAdd('/api/contacts/contact', {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      tags: 'newsletter',
-    });
+    let backofficeResponse: AxiosResponse | undefined;
+    try {
+      backofficeResponse = await BackOfficeAdd('/api/backoffice/contacts', {
+        first_name: firstName,
+        last_name: lastName,
+        tags: 'newsletter',
+        newsletter: true,
+        email,
+      });
+    } catch (err) {
+      console.log("erreur lors de l'ajour du contact au backoffice", err);
+    }
 
-    const backoffice_contact_id = backofficeResponse.data.data?.id;
-    const contactoffice_contact_id = contactOfficeResponse.data.data?.id;
+    let contactOfficeResponse: AxiosResponse | undefined;
+    try {
+      contactOfficeResponse = await BackOfficeAdd('/api/contacts/contact', {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        tags: 'newsletter',
+      });
+    } catch (err) {
+      console.log("erreur lors de l'ajour du contact au backoffice", err);
+    }
+
+    const backoffice_contact_id = backofficeResponse?.data.data?.id;
+    const contactoffice_contact_id = contactOfficeResponse?.data.data?.id;
 
     const unsubscribeLink = `${
       process.env.FRONTEND_URL
-    }/api/backend/newsletters/unsubscribe?${querystring.encode({
-      name: `${firstName} ${lastName}` as string,
-      email,
-      backoffice_contact_id,
-      contactoffice_contact_id,
-    })}`;
+    }/api/backend/newsletters/unsubscribe?payload=${jwtService.createToken(
+      '24h',
+      {
+        name: `${firstName} ${lastName}` as string,
+        email,
+        backoffice_contact_id,
+        contactoffice_contact_id,
+      }
+    )}`;
 
     const template1 = Handlebars.compile(templateMailToUserSubscribe);
     mailingService.send({
@@ -98,36 +119,41 @@ const add = async (req: Request, res: Response) => {
 };
 
 const unsubscribe = async (req: Request, res: Response) => {
+  const decodedToken = jwtService.decodeToken(req.query.payload as string);
+  if (typeof decodedToken === 'string') {
+    return res.status(400).json({ msg: 'Invalid token' });
+  }
   const { name, email, backoffice_contact_id, contactoffice_contact_id } =
-    req.query;
+    decodedToken;
   try {
     newsLettersService.remove(email as string);
-    patch(`/api/backoffice/contact/${backoffice_contact_id}`, {
+    try{
+    patch(`/api/backoffice/contacts/${backoffice_contact_id}`, {
       newsletter: false,
     });
 
     patch(`/api/contacts/contact/${contactoffice_contact_id}`, {
       newsletter: false,
     });
+  } catch(err){
+    console.log('error while trying to unsubcribe!',err)
+  }
     const template1 = Handlebars.compile(templateMailToUserUnsubscribe);
     mailingService.send({
       to: email as string,
       subject:
-        'Nous avons bien reçu votre desabonnement aux newsletters, Merci!',
+        'Nous avons bien reçu votre désabonnement aux newsletters, Merci!',
       html: template1({}),
     });
 
     const template2 = Handlebars.compile(templateMailToAdminUnsubscribe);
     mailingService.send({
       to: process.env.OWNER_EMAIL || 'acceuil@chillo.tech',
-      subject: 'Un utilisateur vient de ce desabonner aux newsletters!',
+      subject: 'Un utilisateur vient de se désabonner aux newsletters!',
       html: template2({ name, email }),
     });
 
-    res.redirect(
-      (process.env.FRONTEND_URL || 'https://chillo.tech/') +
-        '/newsletters/unsubscribe'
-    );
+    res.json({ msg: 'success' });
   } catch (e) {
     console.error('error when trying ro unscubscribe a user', e);
     res.status(400).json({ msg: 'something went wrong' });

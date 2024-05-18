@@ -11,7 +11,7 @@ const getAvis = async (req: Request, res: Response) => {
       `/api/backoffice/avis?fields=*,avis_id.*&limit=50&filter[status][_eq]=published&filter[note][_gte]=4`
     );
 
-    const preAvis = avis.data.data?.filter(
+    const preAvis = avis?.data.data?.filter(
       (el: any) => el.texte && el.nom && el.texte.length <= MAX_AVIS_BODY_LENGTH
     );
     const finalAvis: any[] = [];
@@ -46,7 +46,7 @@ const getSuggestions = async (req: Request, res: Response) => {
     );
     res.json({
       msg: 'success',
-      suggestions: suggestions.data.data,
+      suggestions: suggestions?.data.data,
     });
   } catch (error) {
     // console.error('error', error);

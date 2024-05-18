@@ -1,35 +1,29 @@
-import {axiosInstance} from "./axios-instance"
+import { axiosInstance } from './axios-instance';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 const deleteItem = (endpoint: string) => {
-	return axiosInstance.delete(endpoint)
-}
+  return axiosInstance.delete(endpoint);
+};
 
 const add = (endpoint: string, data: any) => {
-    const result = axiosInstance.post(
-      `${endpoint}`,
-      data,
-      {
-        headers: {"Content-Type": "application/json"}
-      }
-    )
-    return result;
-}
+  const result = axiosInstance.post(`${endpoint}`, data, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+  return result;
+};
 
 const patch = (endpoint: string, data: any) => {
-	return axiosInstance.patch(
-		endpoint,
-		data,
-		{
-			headers: {"Content-Type": "application/json"}
-		}
-	)
-}
-
-
+  return axiosInstance.patch(endpoint, data, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+};
 
 const search = (endpoint: string) => {
-	return axiosInstance.get(endpoint)
-}
+  try {
+    return axiosInstance.get(endpoint);
+  } catch (err) {
+    return null;
+  }
+};
 
-export {add, search, patch, deleteItem}
+export { add, search, patch, deleteItem };
