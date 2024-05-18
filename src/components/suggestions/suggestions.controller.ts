@@ -43,7 +43,18 @@ const makeSuggestion = async (req: Request, res: Response) => {
       position: suggest.author?.tag.join(', '),
     };
 
-    const contactAddedRes = await add('/api/backoffice/contacts', contact);
+    let contactAddedRes: AxiosResponse;
+    let authorId = '';
+    try {
+      contactAddedRes = await add('/api/backoffice/contacts', contact);
+      authorId = contactAddedRes.data.data.id;
+    } catch (err) {
+      contactAddedRes = await search(
+        `/api/backoffice/contacts/?filter[email][_eq]=${contact.email}`
+      );
+      authorId = contactAddedRes.data.data[0].id;
+      console.log('error when try to add contact', err);
+    }
 
     const contactToSecondBackoffice = {
       phoneIndex: suggest.author?.phoneIndex?.toString(),
@@ -60,7 +71,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
     const suggestion = {
       title: suggest.title,
       description: suggest.description,
-      author: contactAddedRes.data.data.id,
+      author: authorId,
     };
 
     add('/api/backoffice/suggestions', suggestion);
