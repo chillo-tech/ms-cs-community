@@ -3,9 +3,10 @@ import Handlebars from 'handlebars';
 import suggestionsService from './suggestions.service';
 import mailingService from '@components/mailing/mailing.service';
 import fs from 'fs';
-import { add } from '@services/queries';
+import { add, search } from '@services/queries';
 import path from 'path';
 import { contactService } from '@components/contact/contact.services';
+import { AxiosResponse } from 'axios';
 
 const mailToUser = fs.readFileSync(
   path.join(__dirname, '../../views/suggestions/template-mail-to-user.hbs'),
@@ -43,7 +44,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       position: suggest.author?.tag.join(', '),
     };
 
-    let contactAddedRes: AxiosResponse;
+    let contactAddedRes: AxiosResponse | null;
     let authorId = '';
     try {
       contactAddedRes = await add('/api/backoffice/contacts', contact);
@@ -52,7 +53,7 @@ const makeSuggestion = async (req: Request, res: Response) => {
       contactAddedRes = await search(
         `/api/backoffice/contacts/?filter[email][_eq]=${contact.email}`
       );
-      authorId = contactAddedRes.data.data[0].id;
+      authorId = contactAddedRes?.data.data[0].id;
       console.log('error when try to add contact', err);
     }
 
