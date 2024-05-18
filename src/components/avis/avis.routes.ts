@@ -13,7 +13,7 @@ router
 
   
 router
-  .route('/formation')
+  .route('/trainings')
   .get(validate(avisZodSchema.getAvisViewSchema), avisController.searchAvisFormation);
 
 export { router };

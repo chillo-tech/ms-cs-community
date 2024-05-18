@@ -28,7 +28,7 @@ const create = async (req: Request, res: Response) => {
     const sessionResponse = await search(
       `/api/backoffice/Session/${sessionId}/?fields=*,training.*`
     );
-    const session = sessionResponse.data.data;
+    const session = sessionResponse?.data.data;
     const trainingName = session.training.title;
     // send email to admin
     const templateAdmin = Handlebars.compile(templateMailToAdmin);

@@ -25,9 +25,9 @@ const notifyAll = async (req: Request, res: Response, next: NextFunction) => {
       `/api/backoffice/Session/${req.body.data.payload.Session_id}/?fields=*,formation.*`
     );
 
-    const attentesLink = `${process.env.FRONTEND_URL}/formations/${sessionResponse.data.data.formation.slug}/${sessionResponse.data.data.slug}/attentes/`;
+    const attentesLink = `${process.env.FRONTEND_URL}/formations/${sessionResponse?.data.data.formation.slug}/${sessionResponse?.data.data.slug}/attentes/`;
 
-    const session = sessionResponse.data.data;
+    const session = sessionResponse?.data.data;
 
     const candidate = req.body.data.payload.candidate_id;
     // envoyer le mail au candidat
@@ -94,7 +94,7 @@ const inscrire = async (req: Request, res: Response, next: NextFunction) => {
     const sessionResponse = await search(
       `/api/backoffice/Session/${session_id}/?fields=*,formation.*,candidat_inscrit,candidats.candidate_id.*`
     );
-    const candidates = sessionResponse.data.data.candidats.map(
+    const candidates = sessionResponse?.data.data.candidats.map(
       (el: any) => el.candidate_id
     );
     const foundedCandidates = candidates.find(
@@ -109,9 +109,9 @@ const inscrire = async (req: Request, res: Response, next: NextFunction) => {
         short: 'ressource deja existence',
       });
 
-    const attentesLink = `${process.env.FRONTEND_URL}/formations/${sessionResponse.data.data.formation.slug}/${sessionResponse.data.data.slug}/attentes/`;
+    const attentesLink = `${process.env.FRONTEND_URL}/formations/${sessionResponse?.data.data.formation.slug}/${sessionResponse?.data.data.slug}/attentes/`;
 
-    const session = sessionResponse.data.data;
+    const session = sessionResponse?.data.data;
 
     // envoyer le mail au candidat
     const templateCandidate = Handlebars.compile(templateMailToCandidate);

@@ -1,5 +1,6 @@
 export type AvisType = {
-  nom: string;
+  firstName: string;
+  lastName: string;
   subject: string;
   email: string;
   message: string;
