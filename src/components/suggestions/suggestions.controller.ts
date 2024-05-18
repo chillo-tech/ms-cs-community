@@ -67,7 +67,11 @@ const makeSuggestion = async (req: Request, res: Response) => {
       position: suggest.author?.tag.join(', '),
     };
 
-    add('/api/contacts/contact', contactToSecondBackoffice);
+    try {
+      add('/api/contacts/contact', contactToSecondBackoffice);
+    } catch (err) {
+      console.log('error when try to add contact to second backoffice', err);
+    }
 
     const suggestion = {
       title: suggest.title,
