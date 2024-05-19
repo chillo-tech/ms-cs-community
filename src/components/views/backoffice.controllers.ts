@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { search } from '@services/queries';
+import { AxiosError } from 'axios';
 import { Request, Response } from 'express';
 
 const AVIS_LENGTH = 2;
@@ -8,11 +9,12 @@ const MAX_AVIS_BODY_LENGTH = 362;
 const getAvis = async (req: Request, res: Response) => {
   try {
     const avis = await search(
-      `/api/backoffice/avis?fields=*,avis_id.*&limit=50&filter[status][_eq]=published&filter[note][_gte]=4`
+      `/api/backoffice/avis?fields=*,avis_id.*&limit=50&filter[status][_eq]=published&filter[note][_in]=4,5`
     );
 
+
     const preAvis = avis?.data.data?.filter(
-      (el: any) => el.texte && el.nom && el.texte.length <= MAX_AVIS_BODY_LENGTH
+      (el: any) => el.text && el.first_name && el.text.length <= MAX_AVIS_BODY_LENGTH
     );
     const finalAvis: any[] = [];
     const selectedIndex: number[] = [];
@@ -34,7 +36,9 @@ const getAvis = async (req: Request, res: Response) => {
       avis: finalAvis,
     });
   } catch (error) {
-    // console.error('error', error);
+    const err = error as AxiosError;
+
+    console.log('error', err.response?.data);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
@@ -42,14 +46,18 @@ const getAvis = async (req: Request, res: Response) => {
 const getSuggestions = async (req: Request, res: Response) => {
   try {
     const suggestions = await search(
-      '/api/backoffice/suggestions?fields=*,suggestion_contact.contact_id.*&limit=20&filter[status][_eq]=published&filter[statut][_eq]=VALIDE'
+      '/api/backoffice/suggestions?fields=*,author.*,author.contact_id.*&limit=20&filter[status][_eq]=published'
     );
+
+    console.log('suggestions', suggestions?.data.data[0].author);
+
     res.json({
       msg: 'success',
       suggestions: suggestions?.data.data,
     });
   } catch (error) {
-    // console.error('error', error);
+    const err = error as AxiosError;
+    console.log('error', err.response?.data);
     res.status(500).json({ msg: 'quelque chose a mal tourne' });
   }
 };
