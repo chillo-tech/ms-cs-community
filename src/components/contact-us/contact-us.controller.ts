@@ -17,7 +17,7 @@ const templateMailToAdmin = readFileSync(
 const handleContact = async (req: Request, res: Response) => {
   try {
     const { data, appName } = req.body;
-    const referrer = req.headers.referrer || req.headers.referer
+    const referrer = req.headers.referrer || req.headers.referer;
     await contactUsService.create({ ...data, appName, referrer });
     const template1 = Handlebars.compile(templateMailToUser);
     mailingService.send({
@@ -28,9 +28,17 @@ const handleContact = async (req: Request, res: Response) => {
 
     const template2 = Handlebars.compile(templateMailToAdmin);
     mailingService.send({
-      to: process.env.OWNER_EMAIL || "",
+      to: process.env.OWNER_EMAIL || '',
       subject: `Nouveau message depuis ${appName}`,
-      html: template2({ email: data.email, appName, message: data.message }),
+      html: template2({
+        email: data.email,
+        appName,
+        message: data.message,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
+        phoneIndex: data.phoneIndex,
+      }),
     });
 
     res.status(201).json({
