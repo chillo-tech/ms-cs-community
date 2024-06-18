@@ -1,24 +1,46 @@
-import { object, string } from 'zod';
+import { object, optional, string } from 'zod';
 
 class AttenteZodSchema {
   createAttenteSchema = object({
     body: object({
-      email: string(),
+      firstName: optional(
+        string({
+          invalid_type_error: 'Le nom doit être une chaîne de caractères',
+        })
+      ),
+      lastName: optional(
+        string({
+          invalid_type_error: 'Le prenom doit être une chaîne de caractères',
+        })
+      ),
+      email: string().email(),
       message: string({
         invalid_type_error: 'Le message doit être une chaîne de caractères',
       }),
-      phoneNumber: string({
-        invalid_type_error:
-          'Le numéro de téléphone doit être une chaîne de caractères',
-      }),
-      phoneIndex: string({
-        invalid_type_error:
-          "L'index téléphonique doit être une chaîne de caractères",
-      }),
-      sessionId: string({
-        invalid_type_error:
-          "L'id de la session doit être une chaîne de caractères",
-      }),
+      phone: optional(
+        string({
+          invalid_type_error:
+            'Le numéro de téléphone doit être une chaîne de caractères',
+        })
+      ),
+      phoneIndex: optional(
+        string({
+          invalid_type_error:
+            "L'index téléphonique doit être une chaîne de caractères",
+        })
+      ),
+      sessionId: optional(
+        string({
+          invalid_type_error:
+            "L'id de la session doit être une chaîne de caractères",
+        })
+      ),
+      itemSlug: optional(
+        string({
+          invalid_type_error:
+            "Le slug de l'item doit être une chaîne de caractères",
+        })
+      ),
     }),
   });
 }
