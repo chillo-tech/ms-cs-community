@@ -3,6 +3,10 @@ import { object, optional, string } from 'zod';
 class AttenteZodSchema {
   createAttenteSchema = object({
     body: object({
+      appName: string({
+        invalid_type_error:
+          "Le nom de l'application doit être une chaîne de caractères",
+      }),
       firstName: optional(
         string({
           invalid_type_error: 'Le nom doit être une chaîne de caractères',

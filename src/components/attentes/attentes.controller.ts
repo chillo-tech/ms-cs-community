@@ -30,6 +30,7 @@ const create = async (req: Request, res: Response) => {
       phoneIndex,
       phone: phoneNumber,
       message,
+      appName,
     } = req.body;
     const itemresponse = await search(
       `/api/backoffice/item?filter[slug][_eq]=${itemSlug}`
@@ -56,6 +57,7 @@ const create = async (req: Request, res: Response) => {
           email,
           label: item.title,
           message,
+          appName,
         }),
       });
     } else {
@@ -91,7 +93,8 @@ const create = async (req: Request, res: Response) => {
     const contactToContactOffice = {
       phoneindex: phoneIndex,
       phone: phoneNumber,
-      name: ``,
+      firstName,
+      lastName,
       email: email,
       tags: 'devdelopper, tech, newsletter',
       position: 'client',
@@ -101,7 +104,8 @@ const create = async (req: Request, res: Response) => {
     const contactToBackoffice = {
       phoneIndex,
       phone: phoneNumber,
-      name: ``,
+      firstName,
+      lastName,
       email: email,
       tags: 'devdelopper, tech, newsletter',
       position: 'client',
