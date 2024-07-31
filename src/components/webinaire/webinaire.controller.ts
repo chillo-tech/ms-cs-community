@@ -58,7 +58,7 @@ const create = async (req: Request, res: Response) => {
       },
     });
 
-    add('/api/backoffice/contact', {
+    add('/api/backoffice/contacts', {
       phoneIndex,
       phone: phoneNumber,
       name: `${firstName} ${lastName}`,
