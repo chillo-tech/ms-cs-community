@@ -27,6 +27,16 @@ const create = async (req: Request, res: Response) => {
     channel,
   } = req.body;
   try {
+   console.log({
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    newsletter,
+    phoneIndex,
+    channel,
+  });
+    
     // add candidate
     add('/api/backoffice/candidate', {
       firstName,
