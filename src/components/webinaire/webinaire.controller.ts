@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { add, search } from '@services/queries';
 import Handlebars from 'handlebars';
 import { Request, Response } from 'express';
@@ -14,20 +15,15 @@ const templateMailToUser = readFileSync(
   'utf-8'
 );
 
+const removeEmpty = (obj: any) => {
+  Object.keys(obj).forEach((k) => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
+  return obj;
+};
 const create = async (req: Request, res: Response) => {
-  const { planning_id, webinaire_id } = req.params;
-
-  const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber = '',
-    newsletter,
-    phoneIndex = '',
-    channel,
-  } = req.body;
+  const {  webinaire_id } = req.params;
   try {
-   console.log({
+   const data = removeEmpty(req.body);
+   const {
     firstName,
     lastName,
     email,
@@ -35,49 +31,37 @@ const create = async (req: Request, res: Response) => {
     newsletter,
     phoneIndex,
     channel,
-  });
-    
+  } = data;
     // add candidate
     add('/api/backoffice/candidate', {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      phone_index: phoneIndex,
+      phone: phoneNumber,
+      newsletter, 
+      channel
+    });
+    add('/api/backoffice/contacts', { 
+      first_name: firstName,
+      last_name: lastName,
+      phone_index: phoneIndex,
+      phone: phoneNumber,
+      email: email,
+      newsletter, 
+      channel
+    });
+    add('/api/contacts/contact', {
       firstName,
       lastName,
-      email,
-      phoneIndex,
-      phone: phoneNumber,
-      plannings: {
-        create: [
-          {
-            candidate_id: '+',
-            planning_id: {
-              id: planning_id,
-            },
-          },
-        ],
-        update: [],
-        delete: [],
-      },
-    });
-
-    add('/api/backoffice/contacts', {
-      phoneIndex,
-      phone: phoneNumber,
-      name: `${firstName} ${lastName}`,
-      email: email,
-      tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
-      position: 'client',
-    });
-
-    add('/api/contacts/contact', {
       phoneindex: phoneIndex,
       phone: phoneNumber,
-      name: `${firstName} ${lastName}`,
       email: email,
       tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
       position: 'client',
     });
-
     const webinaireResponse = await search(
-      `/api/backoffice/webinaire/${webinaire_id}?fields=*,company.*`
+      `/api/backoffice/webinar/${webinaire_id}?fields=*,company.*`
     );
 
     const webinaire = webinaireResponse?.data.data;
@@ -120,9 +104,10 @@ const create = async (req: Request, res: Response) => {
         channel_id: channel_id,
       });
     }
-
+      
     res.json({ msg: 'success' });
   } catch (err) {
+    console.log(err)
     return res.status(500).json({ msg: 'something went wrong' });
   }
 };
