@@ -84,7 +84,7 @@ const create = async (req: Request, res: Response) => {
     return res.json({ msg: 'success', avis });
   } catch (err) {
     console.log('err', err);
-    res.status(500).json({ msg: 'quelque chose a mal tourne' });
+    res.status(500).json({ msg: "Une erreur s'est produite nous allons la réparer" });
   }
 };
 
@@ -108,7 +108,7 @@ const searchAvisFormation = async (req: Request, res: Response) => {
     res.json({ msg: 'success', trainings: formation?.data.data, session });
   } catch (error) {
     console.log('error', error);
-    res.status(500).json({ msg: 'quelque chose a mal tourne' });
+    res.status(500).json({ msg: "Une erreur s'est produite nous allons la réparer" });
   }
 };
 

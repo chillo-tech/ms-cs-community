@@ -49,8 +49,6 @@ const getSuggestions = async (req: Request, res: Response) => {
       '/api/backoffice/suggestions?fields=*,author.*,author.contact_id.*&limit=20&filter[status][_eq]=published'
     );
 
-    console.log('suggestions', suggestions?.data.data[0].author);
-
     res.json({
       msg: 'success',
       suggestions: suggestions?.data.data,

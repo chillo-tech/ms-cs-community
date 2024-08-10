@@ -8,7 +8,7 @@ class WebinaireZodSchema {
       email: string().email(),
       phoneIndex: string().optional(),
       phoneNumber: string().optional(),
-      channel: string(),
+      channel: string().optional(),
       newsletter: boolean().optional(),
     }),
     params: object({

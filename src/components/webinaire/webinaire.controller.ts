@@ -1,4 +1,5 @@
-import { add, search } from '@services/queries';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { add, patch, search } from '@services/queries';
 import Handlebars from 'handlebars';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
@@ -14,61 +15,83 @@ const templateMailToUser = readFileSync(
   'utf-8'
 );
 
+const removeEmpty = (obj: any) => {
+  Object.keys(obj).forEach(
+    k => !obj[k] && obj[k] !== undefined && delete obj[k]
+  );
+  return obj;
+};
 const create = async (req: Request, res: Response) => {
-  const { planning_id, webinaire_id } = req.params;
-
-  const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber = '',
-    newsletter,
-    phoneIndex = '',
-    channel,
-  } = req.body;
+  const { webinaire_id,planning_id } = req.params;
   try {
-    // add candidate
-    add('/api/backoffice/candidate', {
+    const data = removeEmpty(req.body);
+    const {
       firstName,
       lastName,
       email,
+      phoneNumber,
+      newsletter,
       phoneIndex,
+      channel,
+    } = data;
+    // add candidate
+    /*
+    add('/api/backoffice/candidate', {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      phone_index: phoneIndex,
       phone: phoneNumber,
-      plannings: {
-        create: [
+      newsletter,
+      channel,
+    });
+    */
+    add('/api/backoffice/contacts', {
+      first_name: firstName,
+      last_name: lastName,
+      phone_index: phoneIndex,
+      phone: phoneNumber,
+      email: email,
+      newsletter,
+      channel,
+    });
+    add('/api/contacts/contact', {
+      firstName,
+      lastName,
+      phoneindex: phoneIndex,
+      phone: phoneNumber,
+      email: email,
+      tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
+      position: 'client',
+    });
+    const webinaireResponse = await search(
+      `/api/backoffice/webinar/${webinaire_id}?fields=*,company.*`
+    );
+
+    patch(`/api/backoffice/webinar/${webinaire_id}`, {
+      planings: {
+        update: [
           {
-            candidate_id: '+',
-            planning_id: {
-              id: planning_id,
+            id: planning_id,
+            candidates: {
+              create: [
+                {
+                  candidate_id: {
+                    first_name: firstName,
+                    last_name: lastName,
+                    phone_index: phoneIndex,
+                    phone: phoneNumber,
+                    email: email,
+                    newsletter,
+                    channel,
+                  },
+                },
+              ],
             },
           },
         ],
-        update: [],
-        delete: [],
       },
     });
-
-    add('/api/backoffice/contact', {
-      phoneIndex,
-      phone: phoneNumber,
-      name: `${firstName} ${lastName}`,
-      email: email,
-      tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
-      position: 'client',
-    });
-
-    add('/api/contacts/contact', {
-      phoneindex: phoneIndex,
-      phone: phoneNumber,
-      name: `${firstName} ${lastName}`,
-      email: email,
-      tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
-      position: 'client',
-    });
-
-    const webinaireResponse = await search(
-      `/api/backoffice/webinaire/${webinaire_id}?fields=*,company.*`
-    );
 
     const webinaire = webinaireResponse?.data.data;
     const templateUserMail = Handlebars.compile(templateMailToUser);
@@ -113,6 +136,7 @@ const create = async (req: Request, res: Response) => {
 
     res.json({ msg: 'success' });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ msg: 'something went wrong' });
   }
 };
