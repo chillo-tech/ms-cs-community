@@ -123,6 +123,8 @@ jobs:
             echo CONTACT_API_TOKEN=${{ secrets.CONTACT_API_TOKEN }} >> ${{ env.FOLDER }}/.env
             echo CONTACT_API=${{ secrets.CONTACT_API }} >> ${{ env.FOLDER }}/.env
             echo FRONTEND_URL=${{ secrets.FRONTEND_URL }} >> ${{ env.FOLDER }}/.env
+            echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> ${{ env.FOLDER }}/.env
+            echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> ${{ env.FOLDER }}/.env
             
             sudo docker compose -f ${{ env.FOLDER }}/compose.yaml up -d
 
