@@ -1,5 +1,5 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { add, search } from '@services/queries';
+import { add, patch, search } from '@services/queries';
 import Handlebars from 'handlebars';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
@@ -16,40 +16,44 @@ const templateMailToUser = readFileSync(
 );
 
 const removeEmpty = (obj: any) => {
-  Object.keys(obj).forEach((k) => (!obj[k] && obj[k] !== undefined) && delete obj[k]);
+  Object.keys(obj).forEach(
+    k => !obj[k] && obj[k] !== undefined && delete obj[k]
+  );
   return obj;
 };
 const create = async (req: Request, res: Response) => {
-  const {  webinaire_id } = req.params;
+  const { webinaire_id,planning_id } = req.params;
   try {
-   const data = removeEmpty(req.body);
-   const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    newsletter,
-    phoneIndex,
-    channel,
-  } = data;
+    const data = removeEmpty(req.body);
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      newsletter,
+      phoneIndex,
+      channel,
+    } = data;
     // add candidate
+    /*
     add('/api/backoffice/candidate', {
       first_name: firstName,
       last_name: lastName,
       email,
       phone_index: phoneIndex,
       phone: phoneNumber,
-      newsletter, 
-      channel
+      newsletter,
+      channel,
     });
-    add('/api/backoffice/contacts', { 
+    */
+    add('/api/backoffice/contacts', {
       first_name: firstName,
       last_name: lastName,
       phone_index: phoneIndex,
       phone: phoneNumber,
       email: email,
-      newsletter, 
-      channel
+      newsletter,
+      channel,
     });
     add('/api/contacts/contact', {
       firstName,
@@ -63,6 +67,31 @@ const create = async (req: Request, res: Response) => {
     const webinaireResponse = await search(
       `/api/backoffice/webinar/${webinaire_id}?fields=*,company.*`
     );
+
+    patch(`/api/backoffice/webinar/${webinaire_id}`, {
+      planings: {
+        update: [
+          {
+            id: planning_id,
+            candidates: {
+              create: [
+                {
+                  candidate_id: {
+                    first_name: firstName,
+                    last_name: lastName,
+                    phone_index: phoneIndex,
+                    phone: phoneNumber,
+                    email: email,
+                    newsletter,
+                    channel,
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    });
 
     const webinaire = webinaireResponse?.data.data;
     const templateUserMail = Handlebars.compile(templateMailToUser);
@@ -104,10 +133,10 @@ const create = async (req: Request, res: Response) => {
         channel_id: channel_id,
       });
     }
-      
+
     res.json({ msg: 'success' });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).json({ msg: 'something went wrong' });
   }
 };

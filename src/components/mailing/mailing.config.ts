@@ -9,9 +9,9 @@ config();
 // );
 
 export const transporter = createTransport({
-  service: 'gmail',
+  host: 'smtp-relay.brevo.com',
   auth: {
-    user: 'brightkyefoo@gmail.com',
-    pass: process.env.GMAIL_PWD,
+    user: process.env.SMTP_USERNAME,
+    pass: process.env.SMTP_PASSWORD,
   },
 });

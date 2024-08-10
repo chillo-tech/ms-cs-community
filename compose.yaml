@@ -21,6 +21,8 @@ services:
       FRONTEND_URL: ${FRONTEND_URL}
       CONTACT_API_TOKEN: ${CONTACT_API_TOKEN}
       CONTACT_API: ${CONTACT_API}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
       
     networks:
       - applications-network
