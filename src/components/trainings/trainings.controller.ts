@@ -1,17 +1,17 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
-import { add, patch, search } from '@services/queries';
+import { add, search } from '@services/queries';
 import Handlebars from 'handlebars';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import path from 'path';
 import mailingService from '@components/mailing/mailing.service';
 const templateMailToAdmin = readFileSync(
-  path.join(__dirname, '../../views/webinaire/mail-to-admin.hbs'),
+  path.join(__dirname, '../../views/trainings/mail-to-admin.hbs'),
   'utf-8'
 );
 
 const templateMailToUser = readFileSync(
-  path.join(__dirname, '../../views/webinaire/mail-to-user.hbs'),
+  path.join(__dirname, '../../views/trainings/mail-to-user.hbs'),
   'utf-8'
 );
 
@@ -22,7 +22,7 @@ const removeEmpty = (obj: any) => {
   return obj;
 };
 const create = async (req: Request, res: Response) => {
-  const { webinaire_id,planning_id } = req.params;
+  const { id } = req.params;
   try {
     const data = removeEmpty(req.body);
     const {
@@ -64,75 +64,36 @@ const create = async (req: Request, res: Response) => {
       tags: `devdelopper, tech${newsletter ? ', ' + newsletter : ''}`,
       position: 'client',
     });
-    const webinaireResponse = await search(
-      `/api/backoffice/webinar/${webinaire_id}?fields=*,company.*`
+    const response = await search(
+      `/api/backoffice/trainings/${id}?fields=id,title,programs.*`
     );
 
-    patch(`/api/backoffice/webinar/${webinaire_id}`, {
-      planings: {
-        update: [
-          {
-            id: planning_id,
-            candidates: {
-              create: [
-                {
-                  candidate_id: {
-                    first_name: firstName,
-                    last_name: lastName,
-                    phone_index: phoneIndex,
-                    phone: phoneNumber,
-                    email: email,
-                    newsletter,
-                    channel,
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    });
-
-    const webinaire = webinaireResponse?.data.data;
+    const training = response?.data.data;
+    const {programs = []} = training;
     const templateUserMail = Handlebars.compile(templateMailToUser);
-
     mailingService.send({
       to: email,
-      subject: `Nous avons bien recu votre inscription`,
+      subject: `chillo.tech - programme de la formation ${training.title}`,
       html: templateUserMail({
         name: `${firstName} ${lastName}`,
-        title: webinaire.title,
+        title: training.title,
+        link: programs[0].file,
+        linkLabel: "Télécharger le programme"
+
       }),
     });
-/*
+
     const template = Handlebars.compile(templateMailToAdmin);
     mailingService.send({
       to: process.env.OWNER_EMAIL || '',
-      subject: `Nouvelle reponse au webinaire !`,
+      subject: `Nouveau téléchargement de la formation ${training.title}`,
       html: template({
         name: `${firstName} ${lastName}`,
-        title: webinaire.title,
+        title: training.title,
+        phone: `${phoneIndex}${phoneNumber}`,
+        email: email,
       }),
     });
-*/
-    if (webinaire.company?.id) {
-      let channel_id = 0;
-      if (isNaN(parseInt(channel))) {
-        const {
-          data: { data: channelData },
-        } = await add('/api/backoffice/channel', {
-          title: channel,
-          description: '',
-        });
-        channel_id = channelData.id;
-      } else {
-        channel_id = parseInt(channel);
-      }
-      add('/api/backoffice/popularity', {
-        company_id: webinaire.company?.id,
-        channel_id: channel_id,
-      });
-    }
 
     res.json({ msg: 'success' });
   } catch (err) {
@@ -141,8 +102,8 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
-const webinaireController = {
+const trainingController = {
   create,
 };
 
-export { webinaireController };
+export { trainingController };

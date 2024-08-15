@@ -6,7 +6,7 @@ const create = async (suggestion: SuggestionType) => {
     const newSuggestion = await Suggestions.create(suggestion);
     return newSuggestion.toJSON();
   } catch (err) {
-    throw new Error('something went wrong went creating a new suggestion');
+    throw new Error('Une erreur est survenue went creating a new suggestion');
   }
 };
 

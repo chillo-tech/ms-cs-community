@@ -11,6 +11,7 @@ import { backofficeRouter } from '@components/views';
 import { formationRouter } from '@components/formations';
 import { attentesRouter } from '@components/attentes/attentes.router';
 import { webinaireRouter } from '@components/webinaire/webinaire.routes';
+import { trainingsRouter } from '@components/trainings/trainings.routes';
 import { router as contactUsRouter } from '@components/contact-us/contact-us.routes';
 
 const PREFIX = 'api';
@@ -38,5 +39,6 @@ app.use(`/${PREFIX}/${VERSION}/formations`, formationRouter);
 app.use(`/${PREFIX}/${VERSION}/attentes`, attentesRouter);
 app.use(`/${PREFIX}/${VERSION}/webinaire`, webinaireRouter);
 app.use(`/${PREFIX}/${VERSION}/contact-us`, contactUsRouter);
+app.use(`/${PREFIX}/${VERSION}/trainings`, trainingsRouter);
 
 export default app;

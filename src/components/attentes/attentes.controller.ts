@@ -115,7 +115,7 @@ const create = async (req: Request, res: Response) => {
     return res.json({ msg: 'success' });
   } catch (error) {
     console.log('error', error);
-    res.status(500).json({ msg: 'something went wrong' });
+    res.status(500).json({ msg: 'Une erreur est survenue' });
   }
 };
 

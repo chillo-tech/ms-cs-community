@@ -6,8 +6,8 @@ const create = async (user: User) => {
     const newUser = await NewslettersUser.create(user);
     return newUser.toJSON();
   } catch (err) {
-    console.error('something went wrong when creating a new User', err);
-    throw new Error('something went wrong when creating a new User');
+    console.error('Une erreur est survenue when creating a new User', err);
+    throw new Error('Une erreur est survenue when creating a new User');
   }
 };
 
@@ -19,8 +19,8 @@ const remove = async (email: string) => {
     );
     return deletedUser?.toJSON();
   } catch (err) {
-    console.error('something went wrong when creating a new User', err);
-    throw new Error('something went wrong when creating a new User');
+    console.error('Une erreur est survenue when creating a new User', err);
+    throw new Error('Une erreur est survenue when creating a new User');
   }
 };
 

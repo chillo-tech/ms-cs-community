@@ -114,7 +114,7 @@ const add = async (req: Request, res: Response) => {
     res.json({ msg: 'success', user });
   } catch (e) {
     console.error('Error when trying to register a user', e);
-    res.status(400).json({ msg: 'something went wrong' });
+    res.status(400).json({ msg: 'Une erreur est survenue' });
   }
 };
 
@@ -156,7 +156,7 @@ const unsubscribe = async (req: Request, res: Response) => {
     res.json({ msg: 'success' });
   } catch (e) {
     console.error('error when trying ro unscubscribe a user', e);
-    res.status(400).json({ msg: 'something went wrong' });
+    res.status(400).json({ msg: 'Une erreur est survenue' });
   }
 };
 
