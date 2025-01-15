@@ -5,10 +5,12 @@ import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import path from 'path';
 import mailingService from '@components/mailing/mailing.service';
+/*
 const templateMailToAdmin = readFileSync(
   path.join(__dirname, '../../views/webinaire/mail-to-admin.hbs'),
   'utf-8'
 );
+*/
 
 const templateMailToUser = readFileSync(
   path.join(__dirname, '../../views/webinaire/mail-to-user.hbs'),
@@ -46,14 +48,23 @@ const create = async (req: Request, res: Response) => {
       channel,
     });
     */
+   console.log('====================================');
+   console.log({
+    first_name: firstName,
+    last_name: lastName,
+    phone_index: phoneIndex,
+    phone: phoneNumber,
+    email: email,
+    newsletter,
+    channel,
+  });
+   console.log('====================================');
     add('/api/backoffice/contacts', {
       first_name: firstName,
       last_name: lastName,
       phone_index: phoneIndex,
       phone: phoneNumber,
-      email: email,
-      newsletter,
-      channel,
+      email: email
     });
     add('/api/contacts/contact', {
       firstName,
@@ -81,9 +92,7 @@ const create = async (req: Request, res: Response) => {
                     last_name: lastName,
                     phone_index: phoneIndex,
                     phone: phoneNumber,
-                    email: email,
-                    newsletter,
-                    channel,
+                    email: email
                   },
                 },
               ],

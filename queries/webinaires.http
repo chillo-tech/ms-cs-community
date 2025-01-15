@@ -1,9 +1,11 @@
-
-POST http://localhost:9000/api/v1/newsletters/register
+POST http://localhost:9000/api/v1/webinaire/5/planning/4
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBOYW1lIjoiU3VnZ2VzdFN5c3RlbSIsImlhdCI6MTcwNDg4Mjc1MCwiZXhwIjoxNzM2NDQwMzUwfQ.-uyScQm_KSQ8LCCS3cgQRQBk8iKcTuMREcy-Js4_GKI
 content-type: application/json
 
 {
-  "name": "achille",
-  "email": "achille.mbougueng@gmail.com"
+    "lastName": "Holloway",
+    "firstName": "Rhona",
+    "email": "camuqyku@mailinator.com",
+    "phoneNumber": "5892045687",
+    "phoneIndex": "+1"
 }
