@@ -57,7 +57,7 @@ jobs:
           tags: ${{env.IMAGE}}:${{env.IMAGE_VERSION}}
           outputs: type=docker,dest=/tmp/${{env.IMAGE}}.tar
       - name: Upload image artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{env.IMAGE}}
           path: /tmp/${{env.IMAGE}}.tar
@@ -125,7 +125,7 @@ jobs:
             echo FRONTEND_URL=${{ secrets.FRONTEND_URL }} >> ${{ env.FOLDER }}/.env
             echo SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} >> ${{ env.FOLDER }}/.env
             echo SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} >> ${{ env.FOLDER }}/.env
-            
+
             sudo docker compose -f ${{ env.FOLDER }}/compose.yaml up -d
 
             rm -f ${{ env.FOLDER }}/.env
