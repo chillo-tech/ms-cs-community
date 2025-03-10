@@ -68,7 +68,7 @@ jobs:
     needs: dockerize
     steps:
       - name: Download image artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{env.IMAGE}}
           path: .
