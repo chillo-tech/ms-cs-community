@@ -6,7 +6,7 @@ import {add, unsubscribe} from './newsletters.controller';
 
 const router = Router();
 
-router.use(authToken);
+//router.use(authToken);
 
 router
   .route('/register')
